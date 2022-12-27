@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <title>Accueil</title>
+</head>
+
+<body>
+    <div>
+        <div id="social-links">
+            <a href="#">
+                <p>
+                    Facebook
+                </p>
+            </a>
+            <a href="#">
+                <p>
+                    Instagram
+                </p>
+            </a>
+            <a href="#">
+                <p>
+                    Twitter
+                </p>
+            </a>
+        </div>
+        <header>
+            <div id="modal-container">
+                <div id="modal">
+                    <img src="public/icons/add_black.svg" alt="close-btn" id="close-icon">
+                    <h3>Se connecter</h3>
+                    <form action="POST">
+                        <h6>
+                            E-mail
+                        </h6>
+                        <input type="email" name="username">
+                        <h6>
+                            Mot de passe
+                        </h6>
+                        <input type="password" name="password">
+                        <input type="submit" value="Connexion" class="cta-btn">
+                    </form>
+                    <button class="text-button" id="toggle-login-btn">
+                        Nouveau utilisateur ? s'inscrire
+                    </button>
+                </div>
+            </div>
+            <div class="boundary">
+                <div id="logo-login">
+                    <div id="logo">
+                        <h4>QedratCom</h4>
+                    </div>
+                    <button id="login-btn">
+                        Se connecter
+                    </button>
+                </div>
+                <nav>
+                    <a href="#">
+                        <h6>
+                            Accueil
+                        </h6>
+                    </a>
+                    <a href="#">
+                        <h6>
+                            News
+                        </h6>
+                    </a>
+                    <a href="#">
+                        <h6>
+                            Idées
+                        </h6>
+                    </a>
+                    <a href="#">
+                        <h6>
+                            Healthy
+                        </h6>
+                    </a>
+                    <a href="#">
+                        <h6>
+                            Saisons
+                        </h6>
+                    </a>
+                    <a href="#">
+                        <h6>
+                            Fetes
+                        </h6>
+                    </a>
+                    <a href="#">
+                        <h6>
+                            Nutritions
+                        </h6>
+                    </a>
+                    <a href="#">
+                        <h6>
+                            Contact
+                        </h6>
+                    </a>
+                </nav>
+            </div>
+        </header>
+        <div class="boundary">
+            <!-- <section id="search-section">
+                <h3>Idées recettes</h3>
+                <form autocomplete="off" id="search-form">
+                    <div id="chips-container">
+                    </div>
+                    <input type="text" name="searchPhrase" placeholder="Rechercher ingrédient" id="search-phrase">
+                    <ul id="results"></ul>
+                </form>
+                <button class="cta-btn trouver-recette">
+                    Trouver des recettes
+                </button>
+            </section> -->
+            <section id="categorie">
+                <table>
+                    <thead>
+                        <th>Recette</th>
+                        <th>Notation</th>
+                        <th>Saison</th>
+                        <th>Calories</th>
+                        <th>Temps de<br>préparation</th>
+                        <th>Temps de<br>cuisson</th>
+                        <th>Temps<br>total</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="parent">
+                                    <div class="recette-text-cadre">
+                                        <div class="recette-text">
+                                            <h5>Loubyaaaaaaaaaaaaaaaaaaaaaaaaa</h5>
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                                                sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                                                nisi ut aliquip ex ea commodo consequat.
+                                                bababoi ah di mamamboiasdasdas as as as a sa as
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="recette-cadre">
+                                        <img src="public/face.jpg" alt="recette">
+                                    </div>
+                                </div>
+                            </td>
+                            <td>⭐(4)</td>
+                            <td>Hiver</td>
+                            <td>330 Kca</td>
+                            <td>20 min</td>
+                            <td>30 min</td>
+                            <td>1 heure 30min</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+        </div>
+    </div>
+    <footer>
+        <div class="boundary">asas</div>
+    </footer>
+</body>
+<script src="jquery-3.6.1.min.js"></script>
+<script src="script.js"></script>
+
+</html>

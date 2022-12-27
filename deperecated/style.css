@@ -1,0 +1,438 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Rubik', sans-serif;
+}
+
+body {
+    background-color: #FFF9ED;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+h1 {
+    font-size: 3.125rem;
+    font-weight: 700;
+    color: #2B2A28;
+}
+
+h2 {
+    font-size: 2.375rem;
+    font-weight: 700;
+    color: #2B2A28;
+}
+
+h3 {
+    font-size: 1.75rem;
+    font-weight: 500;
+    color: #2B2A28;
+}
+
+h4 {
+    font-size: 1.3125rem;
+    font-weight: 500;
+    color: #2B2A28;
+}
+
+h5 {
+    font-size: 1rem;
+    font-weight: 400;
+    color: #2B2A28;
+}
+
+h6 {
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: #2B2A28;
+}
+
+p {
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: #2B2A28;
+}
+
+.boundary {
+    max-width: 64rem;
+    margin: auto;
+}
+
+header>.boundary,
+footer>.boundary {
+    padding-inline: 2rem;
+}
+
+#logo {
+    color: #F27925 !important;
+}
+
+header {
+    background-color: white;
+    padding-inline: 2rem;
+    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.22);
+    position: relative;
+    z-index: 100;
+}
+
+header>.boundary>#logo-login {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-block: 1rem;
+}
+
+header>.boundary>nav {
+    display: flex;
+    justify-content: space-between;
+}
+
+header>.boundary>nav>a {
+    text-decoration: none;
+    border-bottom: solid 2px transparent;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding-block: 1rem;
+}
+
+header>.boundary>nav>a>* {
+    font-weight: 500;
+}
+
+header>.boundary>nav>a:hover>* {
+    color: #F27925;
+}
+
+header>.boundary>nav>a:hover {
+    border-bottom: solid 2px #F27925;
+}
+
+#login-btn:active {
+    border-style: solid;
+}
+
+#login-btn:hover {
+    background-color: #f6f6f6;
+}
+
+#login-btn {
+    background-color: white;
+    height: 3rem;
+    padding-inline: 1rem;
+    cursor: pointer;
+    border: solid 1px #2B2A28;
+}
+
+#social-links {
+    height: 1rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* This part is idee recette */
+#search-section {
+    padding-block: 4rem;
+    padding-inline: 2rem;
+}
+
+#search-section>h3 {
+    margin-bottom: 2.5rem;
+}
+
+#search-form {
+    position: relative;
+    width: 42rem;
+    margin-inline: auto;
+}
+
+#search-phrase {
+    width: 100%;
+    padding: 1rem;
+    display: block;
+}
+
+#results {
+    list-style: none;
+    width: 100%;
+    background-color: #ffffff;
+    border-radius: 0 0 5px 5px;
+    position: absolute;
+}
+
+.result-item {
+    padding: 1rem 0.5rem;
+    cursor: pointer;
+}
+
+.result-item:hover {
+    background-color: #dddddd;
+}
+
+/* this for chips and remove */
+
+#chips-container {
+    min-height: 2.5rem;
+    margin-bottom: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: start;
+    flex-direction: row;
+    gap: 1rem;
+}
+
+.remove-icon {
+    transform: rotateY(0deg) rotate(45deg);
+    cursor: pointer;
+}
+
+.chip {
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding-inline: 0.5rem;
+    background-color: #F27925;
+}
+
+.chip>h6 {
+    color: white;
+}
+
+.trouver-recette{
+    margin: 4rem auto;
+}
+
+
+/* generic cta */
+
+.cta-btn {
+    border: none;
+    padding: 1rem;
+    background-color: #F27925;
+    display: block;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.22);
+}
+
+.cta-btn:hover {
+    background-color: #d57027;
+}
+
+/* this is for categoires */
+
+.title-container {
+    height: 12rem;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.categorie {
+    padding: 3rem;
+}
+
+.categorie:nth-child(2n) {
+    background-color: #FEECD8;
+}
+
+.categorie:nth-child(2n+1) {
+    background-color: #FCD9BB;
+}
+
+.categorie-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+}
+
+.categorie-header>p>a {
+    color: #F27925;
+}
+
+.parent {
+    position: relative;
+    height: 8rem;
+    width: 13.5rem;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.recette-cadre {
+    height: 8rem;
+    width: 13.5rem;
+    position: absolute;
+    top: 0;
+}
+
+.recette-text-cadre:hover {
+    top: -5rem;
+}
+
+.recette-text-cadre {
+    transition: top .2s ease;
+    top: 0;
+    height: 14rem;
+    width: 100%;
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.7) 50%, transparent 90%);
+    position: relative;
+    overflow: hidden;
+    z-index: 50;
+}
+
+.recette-text {
+    text-align: justify;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 6rem;
+    padding-inline: 0.5rem;
+    text-overflow: ellipsis;
+}
+
+.recette-text>h5 {
+    margin-bottom: 1rem;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    color: white;
+}
+
+.recette-text>p {
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    color: white;
+}
+
+.recette-cadre>img {
+    /* The next 3 lines work together */
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    z-index: 5;
+    position: relative;
+    /* TODO fix */
+}
+
+/* This for the modal */
+
+#modal-container {
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    overflow-y: scroll;
+}
+
+#modal-container.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+#modal {
+    background-color: #fff;
+    padding: 3rem 4rem;
+    width: 24rem;
+    position: relative;
+    /* max-width: 90%; */
+}
+
+#modal h3{
+    margin-top: 1rem;
+    margin-bottom: 3rem;
+    text-align: center;
+}
+
+#modal h6 {
+    font-weight: 400;
+    margin-bottom: 0.25rem;
+}
+
+#modal input {
+    width: 100%;
+    padding: 0.5rem;
+    margin-inline: auto;
+    display: block;
+    margin-bottom: 1rem;
+}
+
+#modal .cta-btn{
+    margin-top: 1rem;
+}
+
+.text-button{
+    border: none;
+    color: #F27925;
+    background-color: transparent;
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 0;
+    display: block;
+    margin: auto;
+}
+
+#close-icon{
+    position: absolute;
+    transform: rotateY(0deg) rotate(45deg);
+    cursor: pointer;
+    top: 0;
+    right: 0;
+    margin: 0.5rem;
+    height: 2rem;
+}
+
+/* This is for footer */
+footer {
+    padding: 2rem;
+    width: 100%;
+    background-color: #2B2A28;
+    color: white;
+}
+
+/* table related stuff */
+
+table{
+    width: calc(100% - 4rem);
+    text-align: center;
+    margin-inline: auto;
+    border-collapse: separate;
+    border-spacing: 0rem 0.25rem;
+}
+
+table th{
+    background-color: #FCD9BB;
+    padding: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+table tr {
+    background-color: white;
+}
+
+table td:nth-child(1), table th:nth-child(1){
+    width: 13.5rem;
+}
+
+table td {
+    margin: auto;
+    font-size: 0.75rem;
+    font-weight: 400;
+}
