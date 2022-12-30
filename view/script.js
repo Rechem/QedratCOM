@@ -81,59 +81,44 @@ $(document).ready(function () {
         removeItems();
     })
 
-    // debounce example
-    // let debounce = null;
-    // $('#input').on('keyup', function (e) {
-    //     clearTimeout(debounce);
-    //     debounce = setTimeout(function () {
-    //         $.ajax({ url: 'someurl.jsp', data: { query: q }, type: 'GET' })
-    //     }, 100);
-    // });
+    function debounce(func, timeout = 300) {
+        let timer;
+        return (...args) => {
+            clearTimeout(timer);
+            timer = setTimeout(() => { func.apply(this, args); }, timeout);
+        };
+    }
 
-    let debounce = null;
-    $(searchPhrase).on('keyup focus', (_) => {
+    $('#results').on('mousedown', '.result-item', function () { selectItem($(this).data('id'), $(this).text()) });
+
+    $(searchPhrase).on('keyup focus', debounce((_) => {
         clearTimeout(debounce);
         if (searchPhrase.value === '')
             removeItems();
-        else
-            debounce = setTimeout(function () {
-                removeItems();
-                let counter = 0
-                for (let i of names) {
-                    if (i.toLowerCase().startsWith(searchPhrase.value.toLowerCase())) {
+        else {
+            const forbidenIds = []
+            $('div.chip').each(function () {
+                forbidenIds.push($(this).data('id'));
+            })
+            let url = './IdeeRecette/IdeeRecette.php?q=' + searchPhrase.value
+            if (forbidenIds.length > 0)
+                url += '&ignore=' + forbidenIds.join(',');
+            $('#results').load(url + ' .result-item')
+        }
+    }));
 
-                        const listItem = $('<li>', { class: 'result-item' });
-
-                        listItem.on('mousedown', function () { selectItem(i) });
-
-                        const text = $('<h6>');
-
-                        text.append('<b>' + i.substring(0, searchPhrase.value.length) + '</b>')
-                        text.append(i.substring(searchPhrase.value.length))
-
-                        listItem.append(text);
-                        $('#results').append(listItem);
-
-                        counter++;
-                        if (counter === 4)
-                            break;
-                    }
-                }
-            }, 200);
-    });
-    function selectItem(text) {
-        const chip = $('<div>', { class: 'chip' });
+    function selectItem(id, text) {
+        const chip = $('<div>', { class: 'chip' }).data('id', id);
 
         const h6 = $('<h6>', { text });
         chip.append(h6)
 
-        const img = $('<img>',
-            { src: '../../public/icons/add_white.svg', alt: 'remove', class: 'remove-icon' })
-        img.on('click', function (e) {
+        const removeButton = $('<ion-icon>', { name: "close-outline", class: "remove-icon" });
+        removeButton.on('click', function (e) {
             $(this).closest('div.chip').remove();
         })
 
-        chip.append(img)
+        chip.append(removeButton)
 
         $('#chips-container').append(chip)
 
@@ -182,5 +167,25 @@ $(document).ready(function () {
         scroll.css({ "left": currentPostion + "px" })
 
     }
+
+    // ingredients/etape stuff
+
+    $('#ingredient-tab').on('click', function () {
+        if (!$('#ingredients').hasClass('active')) {
+            $('#ingredients').addClass('active')
+            $('#ingredient-tab').addClass('active')
+            $('#etapes').removeClass('active')
+            $('#etape-tab').removeClass('active')
+        }
+    });
+
+    $('#etape-tab').on('click', function () {
+        if (!$('#etapes').hasClass('active')) {
+            $('#etapes').addClass('active')
+            $('#ingredients').removeClass('active')
+            $('#ingredient-tab').removeClass('active')
+            $('#etape-tab').addClass('active')
+        }
+    })
 
 })

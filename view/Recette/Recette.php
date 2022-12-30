@@ -4,8 +4,8 @@
 <?php
 require_once '../UserTemplate/UserTemplateView.php';
 require_once '../../controller/UserController.php';
-$controller = new UserController();
 $view = new UserTemplateView();
+$controller = new UserController();
 
 if (!isset($_GET['id']))
     header('location: ../Home/Home.php');
@@ -56,10 +56,10 @@ $recette = $controller->getRecetteById($_GET['id']);
                                         <?php
                                         $className = $recette['idDifficulte'] == 1 ? "green" :
                                             ($recette['idDifficulte'] == 2 ? "orange " : "red");
-                                            echo "<b><span class=\"".$className."\">" .utf8_encode($recette['nomDifficulte'])."</span></b>";
-                                            
-                                        
-                                            ?>
+                                        echo "<b><span class=\"" . $className . "\">" . utf8_encode($recette['nomDifficulte']) . "</span></b>";
+
+
+                                        ?>
                                     </h5>
                                 </div>
                                 <div class="text-group">
@@ -116,8 +116,84 @@ $recette = $controller->getRecetteById($_GET['id']);
                 <p>
                     <?php
                     echo utf8_encode($recette['description'])
-                    ?>
+                        ?>
                 </p>
+            </section>
+            <?php
+            if (!empty(trim($recette['video']))) {
+            ?>
+            <section id="recette-video">
+                <video src=<?php echo "../.." . $recette['video'] ?> width="560" height="315"
+                    controls="controls"></video>
+            </section>
+            <?php
+            }
+            ?>
+            <section id="ingredients-etapes">
+                <div class="tabs">
+                    <h5 class="tab active" id="ingredient-tab">Ingrédients</h5>
+                    <h5 class="tab" id="etape-tab">Etapes</h5>
+                </div>
+                <div class="tabs-content">
+                    <div id="ingredients" class="active">
+                        <div class="container">
+                            <?php
+                            $ingredients = $controller->getIngredientsByRecetteId($_GET['id']);
+                            $firstRow = true;
+                            for ($i = 0; $i < count($ingredients); $i++) {
+                                if ($i % 3 == 0) {
+                                    if (!$firstRow)
+                                        echo "</div>";
+                                    else
+                                        $firstRow = false;
+                                    echo "<div class=\"row\">";
+                                }
+                            ?>
+                            <div class="col-sm-4 col p-2">
+                                <div class="ingredient">
+
+                                    <h5>
+                                        <?php
+                                echo utf8_encode($ingredients[$i]['quantite'] . " " . $ingredients[$i]['nomUnite'] . " " . $ingredients[$i]['nomIngredient'])
+                                            ?>
+                                </div>
+                                </h5>
+                            </div>
+                            <?php
+                            }
+                            if (!$firstRow) {
+                                echo "</div>";
+                            }
+                            ?>
+                        </div>
+                    </div>
+                    <div id="etapes" class="">
+                        <?php
+                        $etapes = $controller->getEtapesByRecetteId($_GET['id']);
+                        foreach ($etapes as $row) {
+
+                        ?>
+                        <div class="etape">
+                            <div class="numero-etape">
+                                <h4>
+                                    <?php
+                            echo $row['idEtape'];
+                                        ?>
+                                </h4>
+                            </div>
+                            <div>
+                                <h6>
+                                    <?php
+                            echo utf8_encode($row['contenu']);
+                                        ?>
+                                </h6>
+                            </div>
+                        </div>
+                        <?php
+                        }
+                        ?>
+                    </div>
+                </div>
             </section>
         </div>
     </div>
