@@ -56,7 +56,7 @@ $recette = $controller->getRecetteById($_GET['id']);
                                         <?php
                                         $className = $recette['idDifficulte'] == 1 ? "green" :
                                             ($recette['idDifficulte'] == 2 ? "orange " : "red");
-                                        echo "<b><span class=\"" . $className . "\">" . utf8_encode($recette['nomDifficulte']) . "</span></b>";
+                                        echo "<span class=\"" . $className . " fw-bolder\">" . utf8_encode($recette['nomDifficulte']) . "</span>";
 
 
                                         ?>
@@ -112,7 +112,7 @@ $recette = $controller->getRecetteById($_GET['id']);
                 </div>
             </section>
             <section id="recette-description">
-                <h4>Description</h4>
+                <h4 class="mb-2">Description</h4>
                 <p>
                     <?php
                     echo utf8_encode($recette['description'])

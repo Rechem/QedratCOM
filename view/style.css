@@ -48,7 +48,7 @@ h5 {
     margin: 0;
 }
 
-h6 {
+label, h6 {
     font-size: 0.875rem;
     font-weight: 400;
     color: #2B2A28;
@@ -149,10 +149,11 @@ header>.boundary>nav>a:hover {
 }
 
 section>h3 {
-    margin-bottom: 2.5rem;
+    margin-bottom: 1.5rem;
 }
 
 #search-form {
+    margin-top: 2.5rem;
     position: relative;
     width: 42rem;
     margin-inline: auto;
@@ -171,6 +172,7 @@ section>h3 {
     border-radius: 0 0 5px 5px;
     position: absolute;
     padding: 0;
+    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.22);
 }
 
 .result-item {
@@ -303,6 +305,7 @@ section>h3 {
 .cadre {
     flex-shrink: 0;
     position: relative;
+    height: 8rem;
     width: 13.5rem;
     overflow: hidden;
     cursor: pointer;
@@ -326,7 +329,6 @@ section>h3 {
     width: 100%;
     background: linear-gradient(0deg, rgba(0, 0, 0, 0.7) 50%, transparent 90%);
     position: relative;
-    overflow: hidden;
     z-index: 50;
 }
 
@@ -452,6 +454,7 @@ table {
     margin-inline: auto;
     border-collapse: separate;
     border-spacing: 0rem 0.25rem;
+    
 }
 
 table th {
@@ -462,7 +465,7 @@ table th {
 }
 
 table tr {
-    background-color: white;
+    background-color: #faf3e9;
 }
 
 table td:nth-child(1),
@@ -474,6 +477,7 @@ table td {
     margin: auto;
     font-size: 0.75rem;
     font-weight: 400;
+    padding: 0.75rem;
 }
 
 /* recette page */
@@ -648,6 +652,90 @@ table td {
     margin-bottom: 0;
 }
 
+
+/* filter ans sort */
+#filtrer-trier-content{
+    display: flex;
+    flex-direction: row;
+    gap: 4rem;
+}
+
+
+
+#filtrer-trier{
+    background-color: #FEECD8;
+    border-radius: 0.5rem;
+    
+}
+
+#filtrer-trier-content h5{
+    font-weight: 500;
+}
+
+#filtrer{
+    display: flex;
+    column-gap: 4rem;
+    row-gap: 1rem;
+    flex-grow: 3;
+    flex-wrap: wrap;
+}
+
+#trier::before{
+    content: '';
+    position: absolute;
+    border-left: 1px solid #969089;
+    left: -2rem; 
+    height: 90%; 
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+#trier {
+    position: relative;
+    flex-grow: 1;
+}
+
+#trier select{
+    width: 100%;
+}
+
+#filter-sort-form{
+    padding: 1rem;
+    padding-top: 0;
+}
+
+#filter-sort-form .btns{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin: 1rem;
+}
+
+#clear-total h6{
+    color: #F27925;
+}
+
+/* saison stuff */
+.saison-links-container{
+    width: min(90%, 40rem);
+    margin: auto;
+    gap: 1rem;
+}
+
+.saison-link{
+    border: solid 1px #2B2A28;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 10rem;
+    text-decoration: none;
+    color: #2B2A28;
+}
+
+.saison-link:hover{
+    border: solid 2px #F27925;
+    color: #F27925;
+}
 
 /* This is for footer */
 footer {

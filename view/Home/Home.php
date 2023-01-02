@@ -59,7 +59,7 @@ $view = new UserTemplateView();
                         <h4><?php echo utf8_encode($row['nom']) ?></h4>
                         <p>
                             <a href=<?php
-                    echo "../Categorie/Categorie.php?id=" . $row['idCategorie'];
+                    echo "../Categorie/Categorie.php?categorie=" . $row['idCategorie'];
                             ?>
                             >
                                 afficher plus

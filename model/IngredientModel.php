@@ -2,6 +2,27 @@
 require_once 'Model.php';
 class IngredientModel extends Model
 {
+
+    
+    public function getIngredientsByRecetteId($idRecette)
+    {
+        $pdo = parent::connexion();
+
+        $qtf = $pdo->prepare(
+            "SELECT quantite, u.nom as nomUnite, t.nom as nomIngredient FROM
+            (SELECT idIngredient, quantite, idUnite FROM `recetteingredient`
+            WHERE idRecette = :idRecette) T1
+            JOIN unite u ON T1.idUnite = u.idUnite
+            JOIN ingredient t on T1.idIngredient = t.idIngredient"
+        );
+        $qtf->bindParam(':idRecette', $idRecette, PDO::PARAM_INT);
+        $qtf->execute();
+        $result = $qtf->fetchAll();
+
+        parent::deconnexion($pdo);
+        return $result;
+    }
+
     public function getIngredientsByName($search = "", $ignore = "-1", $limit = 0)
     {
         $pdo = parent::connexion();
@@ -32,6 +53,36 @@ class IngredientModel extends Model
         $qtf->bindParam(':ids', $ids);
         $qtf->execute();
         $result = $qtf->fetchAll();
+
+        parent::deconnexion($pdo);
+        return $result;
+    }
+    
+    private function getIngredientsGroupByRecette()
+    {
+        $pdo = parent::connexion();
+
+        $qtf = "SELECT idRecette, idIngredient FROM recetteingredient
+                ORDER BY idRecette ASC";
+
+        $tmp = parent::requette($pdo, $qtf);
+        $result = $tmp->fetchAll(PDO::FETCH_GROUP);
+
+        parent::deconnexion($pdo);
+        return $result;
+    }
+
+    public function getIngredients()
+    {
+        $pdo = parent::connexion();
+
+        $qtf = "SELECT idIngredient, i.nom as nomIngredient,
+                calories, glucides, lipides, mineraux, vitamines,
+                isHealthy, s.nom as nomSaison FROM `ingredient` i
+                LEFT OUTER JOIN saison s ON
+                s.idSaison = i.Idsaison
+                ORDER BY nomIngredient ASC;";
+        $result = parent::requette($pdo, $qtf);
 
         parent::deconnexion($pdo);
         return $result;

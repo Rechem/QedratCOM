@@ -45,36 +45,19 @@ $(document).ready(function () {
         modal.removeClass('show');
     });
 
-    let names = [
-        'Ayla',
-        'Ayla2',
-        'Ayla3',
-        'Jake',
-        'Sean',
-        'Henry',
-        'Brad',
-        'Stephen',
-        'Taylor',
-        'Timmy',
-        'Cathy',
-        'John',
-        'Amanda',
-        'Amara',
-        'Sam',
-        'Sandy',
-        'Danny',
-        'Ellen',
-        'Camille',
-        'Chloe',
-        'Emily',
-        'Nadia',
-        'Mitchell',
-        'Harvey',
-        'Lucy',
-        'Amy',
-        'Glen',
-        'Peter',
-    ];
+    // rechercher recette related stuff
+
+    $('.trouver-recette').on('click', function(){
+        console.log('hello');
+        const ingredients = [];
+        $('div.chip').each(function () {
+            ingredients.push($(this).data('id'));
+        })
+        if(ingredients.length > 0){
+            const url = 'IdeeRecette.php?ingredients=' + ingredients.join(',');
+            window.location.href = url;
+        }
+    });
 
     const searchPhrase = $('#search-phrase')[0];
     $('#search-form').on('focusout', function () {
@@ -133,7 +116,7 @@ $(document).ready(function () {
         });
     }
 
-    // scroll related stuff
+    // home scroll related stuff
 
     $('.left-swipe-btn').on('click', function () {
         horizontalScroll.call(this, 1)
@@ -186,6 +169,20 @@ $(document).ready(function () {
             $('#ingredient-tab').removeClass('active')
             $('#etape-tab').addClass('active')
         }
+    })
+
+    // filter menu stuff
+
+    $('#clear-total').on('click',function(e){
+        e.preventDefault();
+        $('#filtrer-trier input[name=total]').prop('checked', false);
+    })
+    
+    $('#clear-form').on('click',function(e){
+        e.preventDefault();
+        $(this).closest('form').trigger('reset');
+        $('#filtrer-trier input[checked]').prop('checked', false);
+        $('#filtrer-trier select').prop('selectedIndex',0);
     })
 
 })
