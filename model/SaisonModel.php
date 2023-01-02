@@ -24,7 +24,7 @@ class SaisonModel extends Model
             "SELECT
             recette.idRecette,
             recette.titre,
-            recette.description,
+            SUBSTRING(recette.description,1,255) as description,
             recette.image,
             T2.idSaison
         FROM

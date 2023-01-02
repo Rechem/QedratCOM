@@ -3,7 +3,7 @@ require_once 'Model.php';
 require_once 'IngredientModel.php';
 class RecetteModel extends Model
 {
-    
+
     public function getRecetteById($idRecette)
     {
         $pdo = parent::connexion();
@@ -56,7 +56,7 @@ class RecetteModel extends Model
         $recettes = $ingredientModel->getIngredientsGroupByRecette();
         $savedRecettes = array();
 
-        for ($i = 1; $i < count($recettes); $i++) {
+        for ($i = 1; $i <= count($recettes); $i++) {
             $counter = 0;
 
             foreach ($recettes[$i] as $ingredient) {
@@ -120,7 +120,7 @@ class RecetteModel extends Model
 
         //TODO include notation
         $qtf = $pdo->prepare(
-            "SELECT idRecette, titre, description, image from (SELECT
+            "SELECT idRecette, titre, SUBSTRING(description,1,255) as description, image from (SELECT
             recette.idRecette,
             recette.titre,
             recette.description,
@@ -211,7 +211,8 @@ class RecetteModel extends Model
                     WHEN :sortBy = 'tempsCuisson' THEN `tempsCuisson`
                     Else idRecette
                 END)
-        END DESC;");
+        END DESC;"
+        );
 
         $useRecetteIds = !empty(trim($ingredients));
 
@@ -249,10 +250,28 @@ class RecetteModel extends Model
 
         $qtf->bindParam(':sortBy', $sortBy);
         $qtf->bindParam(':orderBy', $orderBy);
-
+        
         $qtf->execute();
         $result = $qtf->fetchAll(PDO::FETCH_ASSOC);
-
+        
+        return $result;
+    }
+    
+    public function getHealthyRecettes()
+    {
+        $pdo = parent::connexion();
+        
+        $qtf = $pdo->prepare(
+            "SELECT `idRecette`, `titre`, SUBSTRING(`description`,1,255) as description, `image`
+            FROM `recette`
+            WHERE `isHealthy` = 1
+            ORDER BY `idRecette` ASC"
+        );
+        
+        $qtf->execute();
+        $result = $qtf->fetchAll();
+        
+        parent::deconnexion($pdo);
         return $result;
     }
 

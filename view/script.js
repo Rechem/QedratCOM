@@ -47,43 +47,42 @@ $(document).ready(function () {
 
     // rechercher recette related stuff
 
-    $('.trouver-recette').on('click', function(){
-        console.log('hello');
+    $('#search-form .trouver-recette').on('click', function () {
         const ingredients = [];
         $('div.chip').each(function () {
             ingredients.push($(this).data('id'));
         })
-        if(ingredients.length > 0){
+        if (ingredients.length > 0) {
             const url = 'IdeeRecette.php?ingredients=' + ingredients.join(',');
             window.location.href = url;
         }
     });
 
-    const searchPhrase = $('#search-phrase')[0];
     $('#search-form').on('focusout', function () {
         removeItems();
     })
 
     function debounce(func, timeout = 300) {
         let timer;
-        return (...args) => {
+        return function(...args) {
             clearTimeout(timer);
             timer = setTimeout(() => { func.apply(this, args); }, timeout);
         };
     }
 
-    $('#results').on('mousedown', '.result-item', function () { selectItem($(this).data('id'), $(this).text()) });
+    $('#idee-section #results').on('mousedown', '.result-item', function () { selectItem($(this).data('id'), $(this).text()) });
 
-    $(searchPhrase).on('keyup focus', debounce((_) => {
+    $('#idee-section #search-phrase').on('keyup focus',
+    debounce(function (_) {
         clearTimeout(debounce);
-        if (searchPhrase.value === '')
+        if ($(this).val() === '')
             removeItems();
         else {
             const forbidenIds = []
             $('div.chip').each(function () {
                 forbidenIds.push($(this).data('id'));
             })
-            let url = './IdeeRecette/IdeeRecette.php?q=' + searchPhrase.value
+            let url = './IdeeRecette/IdeeRecette.php?q=' + $(this).val()
             if (forbidenIds.length > 0)
                 url += '&ignore=' + forbidenIds.join(',');
             $('#results').load(url + ' .result-item')
@@ -105,7 +104,7 @@ $(document).ready(function () {
 
         $('#chips-container').append(chip)
 
-        searchPhrase.value = '';
+        $('#search-phrase').val('');
         removeItems();
     }
     function removeItems() {
@@ -115,6 +114,24 @@ $(document).ready(function () {
             $(this).remove();
         });
     }
+
+    //  fetes search stuff
+
+    $('#fete-search-section #results').on('mousedown', '.result-item', function () {
+        const url = 'Fete.php?fete=' + $(this).data('id');
+        window.location.href = url;
+    });
+
+    $('#fete-search-section #search-phrase').on('keyup focus',
+    debounce(function (_) {
+        clearTimeout(debounce);
+        if ($(this).val() === '')
+            removeItems();
+        else {
+            let url = './Fete/Fete.php?q=' + $(this).val()
+            $('#results').load(url + ' .result-item')
+        }
+    }));
 
     // home scroll related stuff
 
@@ -173,16 +190,16 @@ $(document).ready(function () {
 
     // filter menu stuff
 
-    $('#clear-total').on('click',function(e){
+    $('#clear-total').on('click', function (e) {
         e.preventDefault();
         $('#filtrer-trier input[name=total]').prop('checked', false);
     })
-    
-    $('#clear-form').on('click',function(e){
+
+    $('#clear-form').on('click', function (e) {
         e.preventDefault();
         $(this).closest('form').trigger('reset');
         $('#filtrer-trier input[checked]').prop('checked', false);
-        $('#filtrer-trier select').prop('selectedIndex',0);
+        $('#filtrer-trier select').prop('selectedIndex', 0);
     })
 
 })

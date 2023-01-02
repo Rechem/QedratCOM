@@ -737,6 +737,55 @@ table td {
     color: #F27925;
 }
 
+/* news related stuff */
+
+.news-frame{
+    border: solid 1px #969089;
+    padding: 1rem;
+    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.22);
+    height: 100%;
+}
+
+.news-frame>*:not(:last-child, :first-child){
+margin-block: 1rem;
+}
+
+.news-frame > .news-image-preview-frame{
+    height: 10rem;
+}
+
+.news-frame > .news-image-preview-frame > img, .news>.news-image-frame > img{
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+.news-frame > p {
+    overflow: hidden; 
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    line-height: 1.4rem;
+    text-align: justify;
+}
+
+.news{
+    margin-inline: 8rem;
+}
+
+.news video{
+    width: 100%;
+}
+
+.news>.news-image-frame{
+    height: 20rem
+}
+
+.news h6{
+    text-align: justify;
+    line-height: 1.5rem;
+}
+
 /* This is for footer */
 footer {
     padding: 2rem;

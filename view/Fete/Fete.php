@@ -13,7 +13,7 @@ $controller = new UserController();
     <?php
     $view->showCSS();
     ?>
-    <title>Idée recettes</title>
+    <title>Fêtes</title>
 </head>
 
 
@@ -25,34 +25,20 @@ $controller = new UserController();
         ?>
         <div class="boundary">
 
-            <section id="idee-section" class="section-padding bg-white">
-                <h3>Idées recettes</h3>
+            <section id="fete-search-section" class="section-padding bg-white">
+                <h3>Fêtes et occasions</h3>
                 <?php
-                if (isset($_GET['ingredients']) && !empty(trim($_GET['ingredients']))) {
-                    $ingredients = $controller->getIngredientsByIds($_GET['ingredients']);
+                if (isset($_GET['fete']) && !empty(trim($_GET['fete']))) {
+                    $fete = $controller->getFeteById($_GET['fete']);
                     ?>
-                    <div class="d-flex align-items-start justify-content-between mb-4">
-                        <h4 >Recettes incluants les ingrédients :
-                            <?php
-                            $fist = true;
-                            foreach ($ingredients as $row) {
-                                if ($fist)
-                                    $fist = false;
-                                else
-                                    echo ', ';
-                                echo utf8_encode($row['nom']);
-                            }
-                            echo '.';
-                            ?>
-                        </h4>
-                        <div>
-                            <a href="<?php ?>IdeeRecette.php" class="text-button">Réinitialiser</a>
-                        </div>
-                    </div>
-                    <?php $view->showFilterMenu($_GET, $controller) ?>
+                    <h4>
+                        <?php
+                        echo utf8_encode($fete['nom']);
+                        ?>
+                    </h4>
                     <div class="container mt-4">
                         <?php
-                        $recettes = $controller->filterSortRecettes($_GET, -1, $_GET['ingredients']);
+                        $recettes = $controller->getRecetteByFeteId($_GET['fete']);
                         $firstRow = true;
                         for ($i = 0; $i < count($recettes); $i++) {
                             if ($i % 4 == 0) {
@@ -80,27 +66,21 @@ $controller = new UserController();
                     <?php
                 } else {
                     ?>
-                    <form id="search-form">
+                    <form id="search-form" class="mb-5">
                         <div id="chips-container">
                         </div>
-                        <input type="text" name="searchPhrase" autofocus placeholder="Rechercher ingrédient"
-                            id="search-phrase">
+                        <input type="text" name="searchPhrase" autofocus placeholder="Rechercher fête" id="search-phrase"
+                        autocomplete="false">
                         <ul id="results">
                             <?php
                             if (isset($_GET['q'])) {
-                                if (isset($_GET['ignore']))
-                                    $ingredients = $controller->getIngredientsByName($_GET['q'], $_GET['ignore']);
-                                else
-                                    $ingredients = $controller->getIngredientsByName($_GET['q']);
-                                foreach ($ingredients as $row) {
-                                    echo utf8_encode("<li class=\"result-item\" data-id=\"" . $row['idIngredient'] . "\">" . $row['nom'] . "</li>");
+                                $fetes = $controller->getFetesByName($_GET['q']);
+                                foreach ($fetes as $row) {
+                                    echo utf8_encode("<li class=\"result-item\" data-id=\"" . $row['idFete'] . "\">" . $row['nom'] . "</li>");
                                 }
                             }
                             ?>
                         </ul>
-                        <button type="button" class="cta-btn trouver-recette">
-                            Trouver des recettes
-                        </button>
                     </form>
                     <?php } ?>
             </section>

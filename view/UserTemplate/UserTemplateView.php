@@ -62,7 +62,7 @@ class UserTemplateView
                             Accueil
                         </h6>
                     </a>
-                    <a href="#">
+                    <a href="../News/News.php">
                         <h6>
                             News
                         </h6>
@@ -72,7 +72,7 @@ class UserTemplateView
                             Idées
                         </h6>
                     </a>
-                    <a href="#">
+                    <a href="../Healthy/Healthy.php">
                         <h6>
                             Healthy
                         </h6>
@@ -82,7 +82,7 @@ class UserTemplateView
                             Saisons
                         </h6>
                     </a>
-                    <a href="#">
+                    <a href="../Fete/Fete.php">
                         <h6>
                             Fetes
                         </h6>
@@ -371,8 +371,28 @@ class UserTemplateView
                         </div>
                     </div>
                 </div>
-        <?php
-
-    }
+                <?php
+}
+public function showNewsCadre($idNews, $date, $image, $titre, $corps)
+{
+    ?>
+        <a href="<?php echo "../News/News.php?news=".$idNews ?>" class="text-decoration-none">
+    <div class="news-frame">
+                            <p><?php
+                            $phpdate = strtotime( $date );
+                            $mysqldate = date( ' d/m/Y', $phpdate );
+                            echo $mysqldate
+                            ?></p>
+                            <div class="news-image-preview-frame">
+                                <img src="<?php echo "../..".$image ?>" alt="news-image">
+                            </div>
+                            <h4><?php echo utf8_encode($titre) ?></h4>
+                            <p>
+                            <?php echo utf8_encode($corps) ?>
+                                </p>
+                        </div>
+                        </a>
+    <?php
+}
 }
 ?>

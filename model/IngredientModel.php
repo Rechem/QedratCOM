@@ -58,7 +58,7 @@ class IngredientModel extends Model
         return $result;
     }
     
-    private function getIngredientsGroupByRecette()
+    public function getIngredientsGroupByRecette()
     {
         $pdo = parent::connexion();
 

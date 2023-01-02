@@ -34,7 +34,7 @@ class CategorieModel extends Model
         $pdo = parent::connexion();
 
         $qtf = $pdo->prepare(
-            "SELECT `idRecette`, `titre`, `description`, `image` FROM `recette` 
+            "SELECT `idRecette`, `titre`,  SUBSTRING(description,1,255) as description, `image` FROM `recette` 
                 WHERE `idCategorie` = :idCategorie
                 LIMIT :limitAmount"
         );
