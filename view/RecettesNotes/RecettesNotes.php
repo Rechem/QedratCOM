@@ -6,17 +6,13 @@ require_once '../UserTemplate/UserTemplateView.php';
 require_once '../../controller/UserController.php';
 $view = new UserTemplateView();
 $controller = new UserController();
-
-if (!isset($_GET['categorie']))
-    header('location: ../Home/Home.php');
-
 session_start();
 
-$fixedCategorie = $_GET['categorie'];
+if(!isset($_SESSION) || !isset($_SESSION['id'])){
+    header("location: ../..");
+}
 
-$categorie = $controller->getCategorieById($_GET['categorie']);
-$recettes = $controller->filterSortRecettes($_GET, $fixedCategorie);
-
+$idUser = $_SESSION['id'];
 
 ?>
 
@@ -26,9 +22,7 @@ $recettes = $controller->filterSortRecettes($_GET, $fixedCategorie);
     $view->showCSS();
     ?>
     <title>
-        <?php
-        echo utf8_encode($categorie['nom'])
-            ?>
+        Favoris
     </title>
 </head>
 
@@ -41,15 +35,10 @@ $recettes = $controller->filterSortRecettes($_GET, $fixedCategorie);
         ?>
         <div class="boundary">
             <section class="section-padding bg-white">
-                <h3>
-                    <?php echo utf8_encode($categorie['nom']) ?>
-                </h3>
-                <?php
-                $view->showFilterMenu($_GET, $controller, $fixedCategorie)
-                ?>
-                <div class="container mt-3">
+                <h3 class="mb-4">Recettes notées</h3>
+                <div class="container mt-4">
                     <?php
-                    // $recettes = $controller->getRecetteByCategorie($_GET['categorie']);
+                    $recettes = $controller->getRecettesNotes($idUser);
                     $firstRow = true;
                     for ($i = 0; $i < count($recettes); $i++) {
                         if ($i % 4 == 0) {
@@ -57,13 +46,15 @@ $recettes = $controller->filterSortRecettes($_GET, $fixedCategorie);
                                 echo "</div>";
                             else
                                 $firstRow = false;
-                            echo "<div class=\"row g-0 mb-2\">";
+                            echo "<div class=\"row\">";
                         }
                         ?>
                         <div class="col-lg-3 col p-2">
-                            <?php
-                            $view->showCadre($recettes[$i]['titre'], $recettes[$i]['description'], $recettes[$i]['image'], $recettes[$i]['idRecette']);
-                            ?>
+                            <div>
+                                <?php
+                                $view->showCadre($recettes[$i]['titre'], $recettes[$i]['description'], $recettes[$i]['image'], $recettes[$i]['idRecette'], $recettes[$i]['note']);
+                                ?>
+                            </div>
                         </div>
                         <?php
                     }
@@ -72,10 +63,11 @@ $recettes = $controller->filterSortRecettes($_GET, $fixedCategorie);
                     }
                     ?>
                 </div>
+            </section>
         </div>
-        </section>
     </div>
     <?php
+
     $view->showFooter();
     $view->showScripts();
     ?>

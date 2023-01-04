@@ -3,30 +3,22 @@ $(document).ready(function () {
     //modal and login related stuff
     let isLogin = true;
 
-    function drawSignup() {
-        $('#modal h3').text('S\'inscrire')
-        $('#modal input[type=submit]').val('Inscription')
-        $('#toggle-login-btn').text('Déjà inscrit ? Se connecter')
-
-        $('<h6>').text('Répeter le mot de passe').insertBefore('#modal input[type=submit]')
-        $('<input>', { type: 'password', name: 'repeat-password' }).insertBefore('#modal input[type=submit]')
-    }
-
-    function drawLogin() {
-        $('#modal h3').text('Se connecter')
-        $('#modal input[type=submit]').val('Connexion')
-        $('#toggle-login-btn').text('Nouveau utilisateur ? S\'inscrire')
-
-        $('#modal h6:eq(2)').remove()
-        $('#modal input[name=repeat-password]').remove()
-    }
-
     function toggleLogin() {
         if (isLogin) {
-            drawSignup()
+            $('#login-form').removeClass('active');
+            $('#login-form input').prop('required',false)
+            
+            $('#login-form input[type=hidden]').attr('name', 'signup')
+            $('#signup-form').addClass('active');
+            $('#signup-form  input, #signup-form select').prop('required',true)
             isLogin = false;
         } else {
-            drawLogin()
+            $('#login-form').addClass('active');
+            $('#login-form  input').prop('required',true)
+            $('#login-form input[type=hidden]').attr('name', 'login')
+
+            $('#signup-form').removeClass('active');
+            $('#signup-form input, #signup-form select').prop('required',false)
             isLogin = true;
         }
     }
@@ -190,9 +182,9 @@ $(document).ready(function () {
 
     // filter menu stuff
 
-    $('#clear-total').on('click', function (e) {
+    $('.clear-siblings').on('click', function (e) {
         e.preventDefault();
-        $('#filtrer-trier input[name=total]').prop('checked', false);
+        $(this).siblings('input').prop('checked', false);
     })
 
     $('#clear-form').on('click', function (e) {

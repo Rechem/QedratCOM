@@ -5,6 +5,7 @@ require_once(__DIR__ . '/../model/SaisonModel.php');
 require_once(__DIR__ . '/../model/CategorieModel.php');
 require_once(__DIR__ . '/../model/FeteModel.php');
 require_once(__DIR__ . '/../model/NewsModel.php');
+require_once(__DIR__ . '/../model/UserModel.php');
 class UserController
 {
     public function getCategories()
@@ -115,6 +116,56 @@ class UserController
     public function getFetesByName($search = "", $limit = 4){
         $feteModel = new FeteModel();
         return $feteModel->getFetesByName($search, $limit);
+    }
+
+    public function login($mail, $password)
+    {
+        $userModel = new UserModel();
+        $userModel->login($mail, $password);
+    }
+
+    public function signUp($nom, $prenom, $mail, $sexe, $dateNaissance, $password)
+    {
+        $userModel = new UserModel();
+        $userModel->signup($nom, $prenom, $mail, $sexe, $dateNaissance, $password);
+    }
+
+    public function isFavorite($idRecette){
+        $userModel = new UserModel();
+        return $userModel->isFavorite($idRecette);
+    }
+
+    public function addToFavorite($idRecette){
+        $userModel = new UserModel();
+        $userModel->addToFavorite($idRecette);
+    }
+
+    public function removeFromFavorite($idRecette){
+        $userModel = new UserModel();
+        $userModel->removeFromFavorite($idRecette);
+    }
+
+    public function note($idRecette, $notation){
+        $userModel = new UserModel();
+        $userModel->note($idRecette, $notation);
+    }
+
+    public function getNote($idRecette)
+    {
+        $userModel = new UserModel();
+        return $userModel->getNote($idRecette);
+    }
+
+    public function getFavoris($idUser)
+    {
+        $userModel = new UserModel();
+        return $userModel->getFavoris($idUser);
+    }
+
+    public function getRecettesNotes($idUser)
+    {
+        $userModel = new UserModel();
+        return $userModel->getRecettesNotes($idUser);
     }
 
 }

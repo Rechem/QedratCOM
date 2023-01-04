@@ -7,8 +7,22 @@ require_once '../../controller/UserController.php';
 $view = new UserTemplateView();
 $controller = new UserController();
 
+session_start();
+
 if (!isset($_GET['id']))
     header('location: ../Home/Home.php');
+
+if (isset($_GET['favorite'])) {
+    if ($_GET['favorite'] == "true") {
+        $controller->addToFavorite($_GET['id']);
+    } else {
+        $controller->removeFromFavorite($_GET['id']);
+    }
+}
+
+if (isset($_GET['note'])) {
+    $controller->note($_GET['id'], $_GET['note']);
+}
 
 $recette = $controller->getRecetteById($_GET['id']);
 ?>
@@ -26,8 +40,8 @@ $recette = $controller->getRecetteById($_GET['id']);
     <div>
         <?php
         $view = new UserTemplateView();
-        $view->showSocialLinks();
-        $view->showHeader();
+
+        $view->showHeader($_POST, $controller, $_SESSION);
         ?>
         <div class="boundary">
             <section id="recette-hero">
@@ -40,12 +54,27 @@ $recette = $controller->getRecetteById($_GET['id']);
                         </div>
                         <div class="col-sm">
                             <div>
-                                <h3><?php
-                                echo utf8_encode($recette['titre']);
-                                ?>
-                                </h3>
-                                <div class="text-group">
-                                    <ion-icon class="notation-icon" name="star"></ion-icon>
+                                <div class="d-flex justify-content-between align-items-center mt-2 me-5">
+                                    <h3 class="me-2">
+                                        <?php
+                                        echo utf8_encode($recette['titre']);
+                                        ?>
+                                    </h3>
+                                    <div role="button">
+                                        <a class="text-decoration-none" href="?id=<?php
+                                        $isFavorite = $controller->isFavorite($_GET['id']) == "true" ? "false" : "true";
+                                        $nameIcon = $isFavorite == "false" ? "heart" : "heart-outline";
+                                        echo $_GET['id'] . "&favorite=" . $isFavorite;
+                                        ?>">
+                                            <ion-icon class="favorite-icon text-danger"
+                                                name="<?php echo $nameIcon ?>"></ion-icon>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="text-group notation-icon d-flex align-items-start">
+                                    <?php echo $recette['note'];?>
+                                    <ion-icon name="star" style="margin-top: 3px; margin-left: -4px;"></ion-icon>
+                                    <?php echo "(".$recette['avis']." avis)";?>
                                 </div>
                                 <div class="text-group">
                                     <div class="icon-container">
@@ -57,8 +86,6 @@ $recette = $controller->getRecetteById($_GET['id']);
                                         $className = $recette['idDifficulte'] == 1 ? "green" :
                                             ($recette['idDifficulte'] == 2 ? "orange " : "red");
                                         echo "<span class=\"" . $className . " fw-bolder\">" . utf8_encode($recette['nomDifficulte']) . "</span>";
-
-
                                         ?>
                                     </h5>
                                 </div>
@@ -121,12 +148,12 @@ $recette = $controller->getRecetteById($_GET['id']);
             </section>
             <?php
             if (!empty(trim($recette['video']))) {
-            ?>
-            <section id="recette-video">
-                <video src=<?php echo "../.." . $recette['video'] ?> width="560" height="315"
-                    controls="controls"></video>
-            </section>
-            <?php
+                ?>
+                <section id="recette-video">
+                    <video src=<?php echo "../.." . $recette['video'] ?> width="560" height="315"
+                        controls="controls"></video>
+                </section>
+                <?php
             }
             ?>
             <section id="ingredients-etapes">
@@ -148,18 +175,18 @@ $recette = $controller->getRecetteById($_GET['id']);
                                         $firstRow = false;
                                     echo "<div class=\"row\">";
                                 }
-                            ?>
-                            <div class="col-sm-4 col p-2">
-                                <div class="ingredient">
+                                ?>
+                                <div class="col-sm-4 col p-2">
+                                    <div class="ingredient">
 
-                                    <h5>
-                                        <?php
-                                echo utf8_encode($ingredients[$i]['quantite'] . " " . $ingredients[$i]['nomUnite'] . " " . $ingredients[$i]['nomIngredient'])
-                                            ?>
+                                        <h5>
+                                            <?php
+                                            echo utf8_encode($ingredients[$i]['quantite'] . " " . $ingredients[$i]['nomUnite'] . " " . $ingredients[$i]['nomIngredient'])
+                                                ?>
+                                    </div>
+                                    </h5>
                                 </div>
-                                </h5>
-                            </div>
-                            <?php
+                                <?php
                             }
                             if (!$firstRow) {
                                 echo "</div>";
@@ -172,28 +199,77 @@ $recette = $controller->getRecetteById($_GET['id']);
                         $etapes = $controller->getEtapesByRecetteId($_GET['id']);
                         foreach ($etapes as $row) {
 
-                        ?>
-                        <div class="etape">
-                            <div class="numero-etape">
-                                <h4>
-                                    <?php
-                            echo $row['idEtape'];
+                            ?>
+                            <div class="etape">
+                                <div class="numero-etape">
+                                    <h4>
+                                        <?php
+                                        echo $row['idEtape'];
                                         ?>
-                                </h4>
-                            </div>
-                            <div>
-                                <h6>
-                                    <?php
-                            echo utf8_encode($row['contenu']);
+                                    </h4>
+                                </div>
+                                <div>
+                                    <h6>
+                                        <?php
+                                        echo utf8_encode($row['contenu']);
                                         ?>
-                                </h6>
+                                    </h6>
+                                </div>
                             </div>
-                        </div>
-                        <?php
+                            <?php
                         }
                         ?>
                     </div>
                 </div>
+            </section>
+            <section id="notation" class="bg-white py-5">
+                <h4 class="mb-4">
+                    <?php 
+                    if(!isset($_SESSION) || !isset($_SESSION['id'])){
+                        echo "Connectez-vous pour noter cette recette.";
+                    }else {
+                        if ($controller->getNote($_GET['id']) < 1){
+                            echo "Notez cette recette !";
+                    }else{
+                        echo "Votre note : "."<span class=\"primary-color\">".
+                        $controller->getNote($_GET['id'])."</span>";
+                    }?>
+                     </h4>
+                <form action="" method="get" id="form-notation">
+                    <input type="hidden" name="id" value="<?php echo $_GET['id'] ?>">
+                    <div class="d-inline-block text-center">
+                        <input required type="radio" id="note-1" class="me-1 fs-2" name="note" value="1">
+                        <label for="note-1" class="d-block">
+                            <h5>1</h5>
+                        </label>
+                    </div>
+                    <div class="d-inline-block text-center">
+                        <input required type="radio" id="note-2" class="me-1" name="note" value="2">
+                        <label for="note-2" class="d-block">
+                            <h5>2</h5>
+                        </label>
+                    </div>
+                    <div class="d-inline-block text-center">
+                        <input required type="radio" id="note-3" class="me-1" name="note" value="3">
+                        <label for="note-3" class="d-block">
+                            <h5>3</h5>
+                        </label>
+                    </div>
+                    <div class="d-inline-block text-center">
+                        <input required type="radio" id="note-4" class="me-1" name="note" value="4">
+                        <label for="note-4" class="d-block">
+                            <h5>4</h5>
+                        </label>
+                    </div>
+                    <div class="d-inline-block text-center">
+                        <input required type="radio" id="note-5" class="me-1" name="note" value="5">
+                        <label for="note-5" class="d-block">
+                            <h5>5</h5>
+                        </label>
+                    </div>
+                    <button type="submit" class="cta-btn py-2 px-4 ms-3">Noter</button>
+                </form>
+                <?php } ?>
             </section>
         </div>
     </div>

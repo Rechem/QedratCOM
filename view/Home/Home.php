@@ -6,6 +6,9 @@ require_once '../UserTemplate/UserTemplateView.php';
 require_once '../../controller/UserController.php';
 $controller = new UserController();
 $view = new UserTemplateView();
+
+session_start();
+
 ?>
 
 <head>
@@ -20,8 +23,8 @@ $view = new UserTemplateView();
 <body>
     <div>
         <?php
-        $view->showSocialLinks();
-        $view->showHeader();
+        
+        $view->showHeader($_POST, $controller, $_SESSION);
         ?>
         <div class="boundary">
             <section>

@@ -1,7 +1,7 @@
 <?php
 class UserTemplateView
 {
-    public function showSocialLinks()
+    private function showSocialLinks()
     {
         ?>
         <div id="social-links">
@@ -23,23 +23,77 @@ class UserTemplateView
         </div>
     <?php
     }
-    public function showHeader()
+    public function showHeader($postObject, $controller, $session)
     {
+        ?>
+        <div class="bg-danger d-flex justify-content-center">
+        <h6 class="text-white">
+            <?php
+            // session_start();
+        if(isset($postObject['signup'])){
+            $controller->signUp($postObject['nom'], $postObject['prenom'],
+            $postObject['mailSignup'], $postObject['sexe'], $postObject['dateNaissance'],
+            $postObject['passwordSignup']);
+        }else if(isset($postObject['login'])){
+            $controller->login($postObject['mail'], $postObject['password']);
+        }else if (isset($postObject['deconnexion'])){
+            session_destroy();
+            header("Refresh:0");
+        }
+        ?>
+            </h6>
+        </div>
+        <?php
+        $this->showSocialLinks();
         ?>
         <header>
             <div id="modal-container">
                 <div id="modal">
-                    <img src="../../public/icons/add_black.svg" alt="close-btn" id="close-icon">
+                <ion-icon name="close-outline" id="close-icon" role="button"></ion-icon>
                     <h3>Se connecter</h3>
-                    <form action="POST">
-                        <h6>
-                            E-mail
-                        </h6>
-                        <input type="email" name="username">
-                        <h6>
-                            Mot de passe
-                        </h6>
-                        <input type="password" name="password">
+                    <div id="erreur-container"></div>
+                    <form method="post">
+                        <div id="login-form" class="active">
+                            <input type="hidden" name="login">
+                            <h6>
+                                E-mail
+                            </h6>
+                            <input type="email" name="mail" required>
+                            <h6>
+                                Mot de passe
+                            </h6>
+                            <input type="password" name="password" required>
+                        </div>
+                        <div id="signup-form">
+                            <h6>
+                                Nom
+                            </h6>
+                            <input type="text" name="nom">
+                            <h6>
+                                Prénom
+                            </h6>
+                            <input type="text" name="prenom">
+                            <h6>
+                                E-mail
+                            </h6>
+                            <input type="email" name="mailSignup">
+                                <h6 class="me-4">
+                                    Sexe
+                                </h6>
+                                <select name="sexe">
+                                    <option value hidden>Choisir sexe</option>
+                                    <option value="homme"> Homme </option>
+                                    <option value="femme"> Femme </option>
+                                </select>
+                                <h6>
+                                    Date de naissance
+                                </h6>
+                            <input type="date" name="dateNaissance">
+                            <h6>
+                                Mot de passe
+                            </h6>
+                            <input type="password" name="passwordSignup">
+                        </div>
                         <input type="submit" value="Connexion" class="cta-btn">
                     </form>
                     <button class="text-button" id="toggle-login-btn">
@@ -52,9 +106,37 @@ class UserTemplateView
                     <div id="logo">
                         <h4>QedratCom</h4>
                     </div>
+                    <?php
+                    if (!isset($session) || !isset($session['id'])) {
+                        ?>
                     <button id="login-btn">
                         Se connecter
                     </button>
+                    <?php
+                    } else {
+                        ?>
+                        <div class="dropdown" >
+                            <ion-icon name="person-circle-outline" style="cursor: pointer;"
+                            class="dropdown-toggle fs-2" id="dropdownMenuButton1"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            </ion-icon>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
+                            <li><a role="button" class="dropdown-item mb-1" href="../Favoris/Favoris.php"><h6>Favoris</h6></a></li>
+                            <li><a role="button" class="dropdown-item mb-1" href="../RecettesNotes/RecettesNotes.php"><h6>Recette notées</h6></a></li>
+                            <li><a role="button" class="dropdown-item mb-1" href="#"><h6>Ajouter une recette</h6></a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                            <form action="" method="post" class="dropdown-item">
+                                <input type="submit" name="deconnexion" value="Déconnexion"
+                                class="disconnect-button"/>
+                            </form>
+                                <!-- <h6 role="button" class="dropdown-item" id="disconnect">Déconnexion</h6> -->
+                            </li>
+                        </ul>
+                        </div>
+                    <?php
+                    }
+                    ?>
                 </div>
                 <nav>
                     <a href="../Home/Home.php">
@@ -103,12 +185,20 @@ class UserTemplateView
     <?php
     }
 
-    public function showCadre($titre, $description, $image, $id)
+    public function showCadre($titre, $description, $image, $id, $notation = -1)
     {
         ?>
         <div class="cadre">
-            <a href=<?php echo "../Recette/Recette.php?id=" . $id ?>>
+            <a href=<?php echo "../Recette/Recette.php?id=" . $id ?> class="text-decoration-none">
                 <div class="recette-text-cadre">
+                    <?php
+                    if($notation > 0){
+                    ?>
+                    <div class="d-flex ">
+                        <h5 class="notation-icon stroke-text">
+                            <?php echo $notation;?> <ion-icon name="star"></ion-icon></h5>
+                    </div>
+                    <?php } ?>
                     <div class="recette-text">
                         <h5>
                             <?php echo utf8_encode($titre) ?>
@@ -251,11 +341,11 @@ class UserTemplateView
                                                     echo "checked"; ?>
                                                     value="0,30">
                                             <label for="total-30min">Moin de 30 min</label>
-                                            <button class="text-button mt-2" id="clear-total">
+                                            <button class="text-button mt-2 clear-siblings">
                                                 <h6>
                                                     Effacer la sélection
                                                 </h6>
-                                </button>
+                                            </button>
                                         </div>
                                         <div>
                                             <h5 class="mb-2">Difficulté</h5>
@@ -277,31 +367,36 @@ class UserTemplateView
                                         </div>
                                         <div>
                                             <h5 class="mb-2">Notation</h5>
-                                            <input type="checkbox" id="notation-4-5" class="me-1" name="notation[]"
-                                            <?php if (isset($getObject['notation']) && in_array("4,5", $getObject['notation']))
+                                            <input type="radio" id="notation-4-5" class="me-1" name="notation"
+                                            <?php if (isset($getObject['notation']) && $getObject['notation'] =="4,5")
                                                     echo "checked"; ?>
                                                 value="4,5">
                                             <label for="notation-4-5">≥4</label><br>
-                                            <input type="checkbox" id="notation-3-4" class="me-1" name="notation[]"
-                                            <?php if (isset($getObject['notation']) && in_array("3,4", $getObject['notation']))
+                                            <input type="radio" id="notation-3-4" class="me-1" name="notation"
+                                            <?php if (isset($getObject['notation']) && $getObject['notation'] =="3,4")
                                                     echo "checked"; ?>
                                                 value="3,4">
                                             <label for="notation-3-4">3-4</label><br>
-                                            <input type="checkbox" id="notation-2-3" class="me-1" name="notation[]"
-                                            <?php if (isset($getObject['notation']) && in_array("2,3", $getObject['notation']))
+                                            <input type="radio" id="notation-2-3" class="me-1" name="notation"
+                                            <?php if (isset($getObject['notation']) && $getObject['notation'] =="2,3")
                                                     echo "checked"; ?>
                                                 value="2,3">
                                             <label for="notation-2-3">2-3</label><br>
-                                            <input type="checkbox" id="notation-1-2" class="me-1" name="notation[]"
-                                            <?php if (isset($getObject['notation']) && in_array("1,2", $getObject['notation']))
+                                            <input type="radio" id="notation-1-2" class="me-1" name="notation"
+                                            <?php if (isset($getObject['notation']) && $getObject['notation'] =="1,2")
                                                     echo "checked"; ?>
                                                 value="1,2">
                                             <label for="notation-1-2">1-2</label><br>
-                                            <input type="checkbox" id="notation-0-1" class="me-1" name="notation[]"
-                                            <?php if (isset($getObject['notation']) && in_array("0,1", $getObject['notation']))
+                                            <input type="radio" id="notation-0-1" class="me-1" name="notation"
+                                            <?php if (isset($getObject['notation']) && $getObject['notation'] =="0,1")
                                                     echo "checked"; ?>
                                                 value="0,1">
                                             <label for="notation-0-1">&lt;1</label>
+                                            <button class="text-button mt-2 clear-siblings" >
+                                                <h6>
+                                                    Effacer la sélection
+                                                </h6>
+                                            </button>
                                         </div>
                                         <div>
                                             <h5 class="mb-3">Healthy</h5>
