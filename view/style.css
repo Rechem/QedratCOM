@@ -544,8 +544,21 @@ table td {
 }
 
 #recette-frame {
+    position: relative;
     width: 26rem;
     height: 18rem;
+    z-index: 1;
+}
+
+#recette-frame::before{
+    content: '';
+    width: 27.5rem;
+    height: 20rem;
+    background-color: #FEECD8;
+    position: absolute;
+    top: -0.5rem;
+    right: -0.5rem;
+    z-index: -1;
 }
 
 #recette-frame>img {
@@ -834,6 +847,21 @@ margin-block: 1rem;
 .news h6{
     text-align: justify;
     line-height: 1.5rem;
+}
+
+#contact-form {
+    width: 80%;
+    margin: auto;
+}
+
+#contact-form input{
+    padding: 0.25rem;
+    width: 20rem;
+}
+
+#contact-form textarea {
+    width: 100%;
+    padding: 0.25rem;
 }
 
 /* This is for footer */

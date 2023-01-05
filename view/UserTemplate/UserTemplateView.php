@@ -29,7 +29,6 @@ class UserTemplateView
         <div class="bg-danger d-flex justify-content-center">
         <h6 class="text-white">
             <?php
-            // session_start();
         if(isset($postObject['signup'])){
             $controller->signUp($postObject['nom'], $postObject['prenom'],
             $postObject['mailSignup'], $postObject['sexe'], $postObject['dateNaissance'],
@@ -174,7 +173,7 @@ class UserTemplateView
                             Nutritions
                         </h6>
                     </a>
-                    <a href="#">
+                    <a href="../Contact/Contact.php">
                         <h6>
                             Contact
                         </h6>
