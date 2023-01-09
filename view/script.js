@@ -50,7 +50,7 @@ $(document).ready(function () {
         }
     });
 
-    $('#search-form').on('focusout', function () {
+    $('#search-phrase').on('focusout', function () {
         removeItems();
     })
 
@@ -63,9 +63,27 @@ $(document).ready(function () {
     }
 
     $('#idee-section #results').on('mousedown', '.result-item', function () { selectItem($(this).data('id'), $(this).text()) });
+    $('#add-recette-form #results').on('mousedown', '.result-item', function () {
+        $("<div>").load('./AjouterRecette/AjouterRecette.php?ingredient=' + $(this).data('id') + ' .ingredients>.container>*',
+        function() {
+            $(".ingredients>.container").append($(this).html());
+        })
+        $('#search-phrase').val('');
+        removeItems();
+        // selectItem($(this).data('id'), $(this).text())
+    });
+
+    $('.container').on('click','.remove-ig-recette', function (e) {
+        $(this).closest('div.ingredient').remove();
+    })
 
     $('#idee-section #search-phrase').on('keyup focus',
-    debounce(function (_) {
+    debounce(searchIngredientIdeeRecette));
+
+    $('#add-recette-form #search-phrase').on('keyup focus',
+    debounce(searchIngredientAjouterRecette));
+
+    function searchIngredientIdeeRecette() {
         clearTimeout(debounce);
         if ($(this).val() === '')
             removeItems();
@@ -74,12 +92,28 @@ $(document).ready(function () {
             $('div.chip').each(function () {
                 forbidenIds.push($(this).data('id'));
             })
-            let url = './IdeeRecette/IdeeRecette.php?q=' + $(this).val()
+            let url = './IdeeRecette/IdeeRecette.php' + '?q=' + $(this).val()
             if (forbidenIds.length > 0)
                 url += '&ignore=' + forbidenIds.join(',');
             $('#results').load(url + ' .result-item')
         }
-    }));
+    }
+
+    function searchIngredientAjouterRecette() {
+        clearTimeout(debounce);
+        if ($(this).val() === '')
+            removeItems();
+        else {
+            const forbidenIds = []
+            $('div.ingredient').each(function () {
+                forbidenIds.push($(this).data('id'));
+            })
+            let url = './AjouterRecette/AjouterRecette.php' + '?q=' + $(this).val()
+            if (forbidenIds.length > 0)
+                url += '&ignore=' + forbidenIds.join(',');
+            $('#results').load(url + ' .result-item')
+        }
+    }
 
     function selectItem(id, text) {
         const chip = $('<div>', { class: 'chip' }).data('id', id);
@@ -193,5 +227,19 @@ $(document).ready(function () {
         $('#filtrer-trier input[checked]').prop('checked', false);
         $('#filtrer-trier select').prop('selectedIndex', 0);
     })
+
+    // etapes related stuff 
+
+    $('textarea[name=etapes]').on('keyup focus',
+    debounce(function (_) {
+        clearTimeout(debounce);
+        if ($(this).val() !== ''){
+            let etapes = $(this).val().split(/\n\s*\n/);
+            etapes = etapes.filter(e=>e.trim()!=='\n' && e.trim() !== '');
+            etapes = etapes.map(e=>e.replace(/\n/g, ''))
+            $('#apercu-etapes').empty();
+            $('#apercu-etapes').append(etapes.map((e,i)=> i+1 + ' - ' + e).join('<br>'))
+        }
+    }))
 
 })

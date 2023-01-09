@@ -26,49 +26,59 @@ class UserController
         return $categorieModel->getRecetteByCategorie($idCategorie, $limit);
     }
 
-    public function getRecetteById($idRecette){
+    public function getRecetteById($idRecette)
+    {
         $recetteModel = new RecetteModel();
         return $recetteModel->getRecetteById($idRecette);
     }
 
-    public function getIngredientsByRecetteId($idRecette){
+    public function getIngredientsByRecetteId($idRecette)
+    {
         $ingredientModel = new IngredientModel();
         return $ingredientModel->getIngredientsByRecetteId($idRecette);
     }
 
-    public function getEtapesByRecetteId($idRecette){
+    public function getEtapesByRecetteId($idRecette)
+    {
         $recetteModel = new RecetteModel();
         return $recetteModel->getEtapesByRecetteId($idRecette);
     }
-    public function getIngredientsByName($search = "", $ignore = "-1", $limit = 4){
+    public function getIngredientsByName($search = "", $ignore = "-1", $limit = 4)
+    {
         $ingredientModel = new IngredientModel();
         return $ingredientModel->getIngredientsByName($search, $ignore, $limit);
     }
-    public function getIngredientsByIds($ids){
+    public function getIngredientsByIds($ids)
+    {
         $ingredientModel = new IngredientModel();
         return $ingredientModel->getIngredientsByIds($ids);
     }
-    public function filterSortRecettes($getObject, $fixedCategorie = -1, $ingredients=""){
+    public function filterSortRecettes($getObject, $fixedCategorie = -1, $ingredients = "")
+    {
         $recetteModel = new RecetteModel();
         return $recetteModel->filterSortRecettes($getObject, $fixedCategorie, $ingredients);
     }
 
-    public function getRecettesIdsHavingIngredients($ingredients){
+    public function getRecettesIdsHavingIngredients($ingredients)
+    {
         $recetteModel = new RecetteModel();
         return $recetteModel->getRecettesIdsHavingIngredients($ingredients);
     }
 
-    public function getSaisons(){
+    public function getSaisons()
+    {
         $saisonModel = new SaisonModel();
         return $saisonModel->getSaisons();
     }
 
-    public function getDifficultes(){
+    public function getDifficultes()
+    {
         $recetteModel = new RecetteModel();
         return $recetteModel->getDifficultes();
     }
 
-    public function getRecettesBySaison($idSaison){
+    public function getRecettesBySaison($idSaison)
+    {
         $saisonModel = new SaisonModel();
         return $saisonModel->getRecettesBySaison($idSaison);
     }
@@ -78,42 +88,50 @@ class UserController
         $saisonModel = new SaisonModel();
         return $saisonModel->getSaisonById($idSaison);
     }
-    public function getIngredients(){
+    public function getIngredients()
+    {
         $ingredientModel = new IngredientModel();
         return $ingredientModel->getIngredients();
     }
 
-    public function getHealthyRecettes(){
+    public function getHealthyRecettes()
+    {
         $recetteModel = new RecetteModel();
         return $recetteModel->getHealthyRecettes();
     }
 
-    public function getRecetteByFeteId($idFete){
+    public function getRecetteByFeteId($idFete)
+    {
         $feteModel = new FeteModel();
         return $feteModel->getRecetteByFeteId($idFete);
     }
-    
-    public function getFetes(){
+
+    public function getFetes()
+    {
         $feteModel = new FeteModel();
         return $feteModel->getFetes();
     }
 
-    public function getFeteById($idFete){
+    public function getFeteById($idFete)
+    {
         $feteModel = new FeteModel();
         return $feteModel->getFeteById($idFete);
     }
 
-    public function getNews(){
+    public function getNews()
+    {
         $newsModel = new NewsModel();
         return $newsModel->getNews();
     }
 
-    public function getNewsById($idNews){
+    public function getNewsById($idNews)
+    {
         $newsModel = new NewsModel();
         return $newsModel->getNewsById($idNews);
     }
 
-    public function getFetesByName($search = "", $limit = 4){
+    public function getFetesByName($search = "", $limit = 4)
+    {
         $feteModel = new FeteModel();
         return $feteModel->getFetesByName($search, $limit);
     }
@@ -130,22 +148,26 @@ class UserController
         $userModel->signup($nom, $prenom, $mail, $sexe, $dateNaissance, $password);
     }
 
-    public function isFavorite($idRecette){
+    public function isFavorite($idRecette)
+    {
         $userModel = new UserModel();
         return $userModel->isFavorite($idRecette);
     }
 
-    public function addToFavorite($idRecette){
+    public function addToFavorite($idRecette)
+    {
         $userModel = new UserModel();
         $userModel->addToFavorite($idRecette);
     }
 
-    public function removeFromFavorite($idRecette){
+    public function removeFromFavorite($idRecette)
+    {
         $userModel = new UserModel();
         $userModel->removeFromFavorite($idRecette);
     }
 
-    public function note($idRecette, $notation){
+    public function note($idRecette, $notation)
+    {
         $userModel = new UserModel();
         $userModel->note($idRecette, $notation);
     }
@@ -166,6 +188,58 @@ class UserController
     {
         $userModel = new UserModel();
         return $userModel->getRecettesNotes($idUser);
+    }
+
+    public function getUnites()
+    {
+        $ingredientModel = new IngredientModel();
+        return $ingredientModel->getUnites();
+    }
+
+    public function ajouterRecette(
+        $idUser,
+        $nom,
+        $description,
+        $idDifficulte,
+        $tempsPreparation,
+        $tempsCuisson,
+        $tempsRepos,
+        $image,
+        $video,
+        $ingredients,
+        $etapes,
+        $isHealthy
+    )
+    {
+
+        $recetteModel = new RecetteModel();
+        $recetteModel->ajouterRecette(
+            $idUser,
+            $nom,
+            $description,
+            $idDifficulte,
+            $tempsPreparation,
+            $tempsCuisson,
+            $tempsRepos,
+            $image,
+            $video,
+            $ingredients,
+            $etapes,
+            $isHealthy
+        );
+        return;
+        //     $nom,
+        //     $description,
+        //     $idDifficulte,
+        //     $tempsPreparation,
+        //     $tempsCuisson,
+        //     $tempsRepos,
+        //     $image,
+        //     $video,
+        //     $ingredients,
+        //     $etapes,
+        //     $isHealthy
+        // );
     }
 
 }

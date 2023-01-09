@@ -48,7 +48,7 @@ class IngredientModel extends Model
     {
         $pdo = parent::connexion();
 
-        $qtf = $pdo->prepare("SELECT nom FROM `ingredient`
+        $qtf = $pdo->prepare("SELECT nom, idIngredient FROM `ingredient`
                 WHERE FIND_IN_SET(idIngredient, :ids)");
         $qtf->bindParam(':ids', $ids);
         $qtf->execute();
@@ -82,6 +82,17 @@ class IngredientModel extends Model
                 LEFT OUTER JOIN saison s ON
                 s.idSaison = i.Idsaison
                 ORDER BY nomIngredient ASC;";
+        $result = parent::requette($pdo, $qtf);
+
+        parent::deconnexion($pdo);
+        return $result;
+    }
+
+    public function getUnites()
+    {
+        $pdo = parent::connexion();
+
+        $qtf = "SELECT idUnite, nom FROM `unite`";
         $result = parent::requette($pdo, $qtf);
 
         parent::deconnexion($pdo);

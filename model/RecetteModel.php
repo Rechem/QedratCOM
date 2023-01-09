@@ -332,29 +332,190 @@ class RecetteModel extends Model
 
         $qtf->bindParam(':sortBy', $sortBy);
         $qtf->bindParam(':orderBy', $orderBy);
-        
+
         $qtf->execute();
         $result = $qtf->fetchAll(PDO::FETCH_ASSOC);
-        
+
         return $result;
     }
-    
+
     public function getHealthyRecettes()
     {
         $pdo = parent::connexion();
-        
+
         $qtf = $pdo->prepare(
             "SELECT `idRecette`, `titre`, SUBSTRING(`description`,1,255) as description, `image`
             FROM `recette`
             WHERE `isHealthy` = 1
             ORDER BY `idRecette` ASC"
         );
-        
+
         $qtf->execute();
         $result = $qtf->fetchAll();
-        
+
         parent::deconnexion($pdo);
         return $result;
+    }
+
+    public function ajouterRecette(
+        $isUser,
+        $nom,
+        $description,
+        $idDifficulte,
+        $tempsPreparation,
+        $tempsCuisson,
+        $tempsRepos,
+        $image,
+        $video,
+        $ingredients,
+        $etapes,
+        $isHealthy
+    )
+    {
+        $imageLink = $this->ajouterImage($image);
+        if (empty($imageLink))
+            return;
+
+        $videoLink = "";
+
+        if(isset($video)){
+            $videoLink = $this->ajouterVideo($video);
+        }
+
+        $pdo = parent::connexion();
+
+        try {
+            $pdo->beginTransaction();
+
+            $qtf = $pdo->prepare(
+                "INSERT INTO Recette(idUser, titre, image, description, tempsPreparation, tempsCuisson, tempsRepos, video, isHealthy, idEtat, idCategorie)
+                VALUES (:idUser, :titre, :image, :description, :tempsPreparation, :tempsCuisson, :tempsRepos, :video, :isHealthy, 2, :idCategorie);"
+            );
+
+            $qtf->bindParam(':idUser', $idUser);
+            $qtf->bindParam(':titre', $titre);
+            $qtf->bindParam(':image', $imageLink);
+            $qtf->bindParam(':description', $description);
+            $qtf->bindParam(':tempsPreparation', $tempsPreparation);
+            $qtf->bindParam(':tempsCuisson', $tempsCuisson);
+            $qtf->bindParam(':tempsRepos', $tempsRepos);
+            $qtf->bindParam(':video', $videoLink);
+            $qtf->bindParam(':isHealthy', $isHealthy);
+            $qtf->bindParam(':idCategorie', $idCategorie);
+
+            $qtf->execute();
+            
+            $recetteId = $pdo->lastInsertId();
+            
+            
+            foreach($ingredients as $ing){
+                $qtf2 = $pdo->prepare(
+                    "INSERT INTO recetteingredient(idRecette, idIngredient, quantite, idUnite)
+                    VALUES (:idRecette, :idIngredient, :quantite, :idUnite);"
+                );
+
+                $qtf2->bindParam(':idRecette', $recetteId);
+                $qtf2->bindParam(':idIngredient', $ing['idIngredient']);
+                $qtf2->bindParam(':quantite', $ing['quantite']);
+                $qtf2->bindParam(':idUnite', $ing['idUnite']);
+
+                $qtf2->execute();
+            }
+
+            $numeroEtape = 1;
+
+            foreach ($etapes as $etape) {
+
+                $qtf3 = $pdo->prepare(
+                    "INSERT INTO etape(idRecette, idEtape, contenu)
+                    VALUES (:idRecette, :idEtape, :contenu);"
+                );
+
+                $qtf3->bindParam(':idRecette', $recetteId);
+                $qtf3->bindParam(':idEtape', $numeroEtape);
+                $qtf3->bindParam(':contenu', $etape);
+
+                $qtf3->execute();
+
+                $numeroEtape++;
+
+            }
+
+
+            $pdo->commit();
+        } catch (\PDOException $e) {
+            // rollback the transaction
+            $pdo->rollBack();
+
+            // show the error message
+            die($e->getMessage());
+        } finally {
+            parent::deconnexion($pdo);
+        }
+    }
+
+    private function ajouterImage($image){
+
+        $path_parts = pathinfo(basename($image["name"]));
+        $tempname = $image["tmp_name"];
+
+        $imageFileType = strtolower($path_parts['extension']);
+        if (
+            $imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+        ) {
+            echo "Format incorrect : jpg, jpeg, png seulement";
+            return "";
+        }
+
+        $checkImage = getimagesize($tempname);
+        if (!$checkImage) {
+            echo "Veuillez ajouter une image";
+            return "";
+        }
+
+        $folder = '/public/images/';
+
+        $target_dir = "../.." . $folder;
+        $now = new DateTime();
+        $unixTimeStamp = $now->getTimestamp();
+        $newFileName = str_replace(' ', '_', $path_parts['filename']) ."-". $unixTimeStamp . "." . $path_parts['extension'];
+        $target_file = $target_dir . $newFileName;
+        
+        if (!move_uploaded_file($tempname, $target_file)) {
+            echo "Erreur lors de l'upload de l'image";
+            return "";
+        }
+
+        return $folder . $newFileName;
+    }
+
+    private function ajouterVideo($video){
+
+        $path_parts = pathinfo(basename($video["name"]));
+        $tempname = $video["tmp_name"];
+
+        $imageFileType = strtolower($path_parts['extension']);
+        if (
+            $imageFileType != "mp4" && $imageFileType != "mkv" && $imageFileType != "avi"
+        ) {
+            echo "Format incorrect : mp4, mkv, avi seulement";
+            return "";
+        }
+
+        $folder = '/public/videos/';
+
+        $target_dir = "../.." . $folder;
+        $now = new DateTime();
+        $unixTimeStamp = $now->getTimestamp();
+        $newFileName = str_replace(' ', '_', $path_parts['filename']) ."-". $unixTimeStamp . "." . $path_parts['extension'];
+        $target_file = $target_dir . $newFileName;
+        
+        if (!move_uploaded_file($tempname, $target_file)) {
+            echo "Erreur lors de l'upload de la vidéo";
+            return "";
+        }
+
+        return $folder . $newFileName;
     }
 
 }

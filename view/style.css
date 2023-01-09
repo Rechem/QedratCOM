@@ -183,6 +183,7 @@ section>h3 {
     background-color: #ffffff;
     border-radius: 0 0 5px 5px;
     position: absolute;
+    z-index: 20;
     padding: 0;
     box-shadow: 0 3px 3px rgba(0, 0, 0, 0.22);
 }
@@ -207,6 +208,7 @@ section>h3 {
     flex-direction: row;
     gap: 1rem;
 }
+
 
 .remove-icon {
     color: white;
@@ -862,6 +864,29 @@ margin-block: 1rem;
 #contact-form textarea {
     width: 100%;
     padding: 0.25rem;
+}
+
+/* add recette */
+
+#add-recette-form{
+    width: calc(min(90vw,40rem));
+    position: relative;
+    margin-inline: auto;
+}
+
+#add-recette-form input:not(input[type=file], input[type=checkbox]),
+#add-recette-form textarea{
+    padding: 0.5rem;
+    width: 100%;
+}
+
+#add-recette-form select{
+    padding: 0.5rem;
+}
+
+
+#add-recette-form #chips-container {
+    min-height: 0;
 }
 
 /* This is for footer */
