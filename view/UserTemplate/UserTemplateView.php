@@ -122,7 +122,7 @@ class UserTemplateView
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
                             <li><a role="button" class="dropdown-item mb-1" href="../Favoris/Favoris.php"><h6>Favoris</h6></a></li>
                             <li><a role="button" class="dropdown-item mb-1" href="../RecettesNotes/RecettesNotes.php"><h6>Recette notées</h6></a></li>
-                            <li><a role="button" class="dropdown-item mb-1" href="#"><h6>Ajouter une recette</h6></a></li>
+                            <li><a role="button" class="dropdown-item mb-1" href="../AjouterRecette/AjouterRecette.php"><h6>Ajouter une recette</h6></a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li>
                             <form action="" method="post" class="dropdown-item">
@@ -224,13 +224,26 @@ class UserTemplateView
     public function showScripts()
     {
         ?>
+        
+        <script src="../../jquery-3.6.1.min.js"></script>
+        <script src="../script.js"></script>
+        
+        <!-- bootstrap -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
             crossorigin="anonymous"></script>
+
+        <!-- ionicons -->
         <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
         <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-        <script src="../../jquery-3.6.1.min.js"></script>
-        <script src="../script.js"></script>
+
+        <!-- table -->
+        <script src="https://unpkg.com/bootstrap-table@1.21.2/dist/bootstrap-table.min.js"></script>
+
+        <!-- <script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script> -->
+        <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script> -->
+        
     <?php
     }
 
@@ -238,8 +251,13 @@ class UserTemplateView
     {
         ?>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
-            integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+        
+        <link href="https://unpkg.com/bootstrap-table@1.21.2/dist/bootstrap-table.min.css" rel="stylesheet">
         <link rel="stylesheet" href="../style.css">
+
     <?php
     }
 

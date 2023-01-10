@@ -22,37 +22,47 @@ session_start();
     <div>
         <?php
         if (isset($_POST['submit'])) {
-            if (!isset($_SESSION) || !isset($_SESSION['id']))
-                return;
-            $ingredientsArr = [];
-            for ($i = 0; $i < count($_POST['ingredients']); $i++) {
-                array_push(
+            if (isset($_SESSION) && isset($_SESSION['id'])) {
+                $ingredientsArr = [];
+                for ($i = 0; $i < count($_POST['ingredients']); $i++) {
+                    array_push(
+                        $ingredientsArr,
+                        [
+                            'idIngredient' => $_POST['ingredients'][$i],
+                            'quantite' => $_POST['quantite'][$i],
+                            'idUnite' => $_POST['unite'][$i]
+                        ]
+                    );
+                }
+
+                $etapesArr = preg_split('/\n\s*\n/', $_POST['etapes']);
+                $etapesArr = array_filter($etapesArr, function ($e) {
+                    return trim($e) != '\n' && !empty(trim($e));
+                });
+
+                $etapesArr = array_map(function ($e) {
+                    return str_replace("\r\n", "", $e);
+                }, $etapesArr);
+
+                $fetesArr = [];
+                if(isset($_POST['fete'])){
+                    $fetesArr = $_POST['fete'];
+                }
+
+                $isHealthy = 0;
+                if(isset($_POST['isHealthy'])){
+                    $isHealthy = 1;
+                }
+
+                $controller->ajouterRecette(
+                    $_SESSION['id'],
+                    $_POST['nom'], $_POST['description'], $_POST['categorie'], $_POST['difficulte'],
+                    $_POST['temps-preparation'], $_POST['temps-cuisson'], $_POST['temps-repos'], $_FILES['image'],
+                    $_FILES['video'],
                     $ingredientsArr,
-                    [
-                        'idIngredient' => $_POST['ingredients'][$i],
-                        'quantite' => $_POST['quantite'][$i],
-                        'idUnite' => $_POST['unite'][$i]
-                    ]
+                    $etapesArr, $fetesArr, $isHealthy
                 );
             }
-
-            $etapesArr = preg_split('/\n\s*\n/', $_POST['etapes']);
-            $etapesArr = array_filter($etapesArr, function ($e) {
-                return trim($e) != '\n' && !empty(trim($e));
-            });
-
-            $etapesArr = array_map(function ($e) {
-                return str_replace("\r\n", "", $e);
-            }, $etapesArr);
-
-            $controller->ajouterRecette(
-                $_SESSION['id'],
-                $_POST['nom'], $_POST['description'], $_POST['difficulte'],
-                $_POST['temps-preparation'], $_POST['temps-cuisson'], $_POST['temps-repos'], $_FILES['image'],
-                $_FILES['video'],
-                $ingredientsArr,
-                $etapesArr, $_POST['isHealthy']
-            );
         }
 
         $view->showHeader($_POST, $controller, $_SESSION);
@@ -66,6 +76,23 @@ session_start();
                     <h5 class="mb-1">Description</h5>
                     <textarea name="description" rows="3" class="mb-2" required></textarea>
                     <div class="d-flex align-items-center justify-content-between mb-2">
+                        <h5>Catégorie</h5>
+                        <select name="categorie" required>
+                            <option value hidden>Choisir catégorie</option>
+                            <?php
+                            $categories = $controller->getCategories();
+                            foreach ($categories as $row) {
+                                ?>
+                                <option value="<?php echo $row['idCategorie'] ?>">
+                                    <?php echo utf8_encode($row['nom']) ?>
+                                </option>
+                                <?php
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <hr>
+                    <div class="d-flex align-items-center justify-content-between mb-2">
                         <h5>Difficulté</h5>
                         <select name="difficulte" required>
                             <option value hidden>Choisir difficulté</option>
@@ -74,7 +101,7 @@ session_start();
                             foreach ($difficultes as $row) {
                                 ?>
                                 <option value="<?php echo $row['idDifficulte'] ?>">
-                                    <?php echo $row['nom'] ?>
+                                    <?php echo utf8_encode($row['nom']) ?>
                                 </option>
                                 <?php
                             }
@@ -180,7 +207,25 @@ session_start();
                     <h5 class="my-2">Aperçu des étapes</h5>
                     <h6 id="apercu-etapes" class="lh-base"></h6>
                     <hr>
-                    <div>
+                    <h5 class="my-2">Fêtes</h5>
+                    <div class="d-flex flex-wrap" style="gap : 1rem">
+                        <?php
+                        $fetes = $controller->getFetes();
+                        foreach ($fetes as $row) {
+                            ?>
+                            <div class="d-flex align-items-center">
+                                <input type="checkbox" id="<?php echo 'fete-' . $row['idFete']; ?>" ; class="me-1"
+                                    name="fete[]" value=<?php echo $row['idFete'] ?>>
+                                <label for=<?php echo 'fete-' . $row['idFete'] ?>>
+                                    <?php echo utf8_encode($row['nom']) ?>
+                                </label>
+                            </div>
+                            <?php
+                        }
+                        ?>
+                    </div>
+                    <hr>
+                    <div class="d-flex align-items-center" style="gap: 0.25rem;">
                         <input type="checkbox" name="isHealthy" id="isHealthy">
                         <label for="isHealthy">Recette healthy</label>
                     </div>

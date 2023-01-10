@@ -200,6 +200,7 @@ class UserController
         $idUser,
         $nom,
         $description,
+        $idCategorie,
         $idDifficulte,
         $tempsPreparation,
         $tempsCuisson,
@@ -208,6 +209,7 @@ class UserController
         $video,
         $ingredients,
         $etapes,
+        $fetes,
         $isHealthy
     )
     {
@@ -217,6 +219,7 @@ class UserController
             $idUser,
             $nom,
             $description,
+            $idCategorie,
             $idDifficulte,
             $tempsPreparation,
             $tempsCuisson,
@@ -225,21 +228,10 @@ class UserController
             $video,
             $ingredients,
             $etapes,
+            $fetes,
             $isHealthy
         );
         return;
-        //     $nom,
-        //     $description,
-        //     $idDifficulte,
-        //     $tempsPreparation,
-        //     $tempsCuisson,
-        //     $tempsRepos,
-        //     $image,
-        //     $video,
-        //     $ingredients,
-        //     $etapes,
-        //     $isHealthy
-        // );
     }
 
 }

@@ -357,10 +357,12 @@ class RecetteModel extends Model
         return $result;
     }
 
+
     public function ajouterRecette(
-        $isUser,
+        $idUser,
         $nom,
         $description,
+        $idCategorie,
         $idDifficulte,
         $tempsPreparation,
         $tempsCuisson,
@@ -369,18 +371,38 @@ class RecetteModel extends Model
         $video,
         $ingredients,
         $etapes,
+        $fetes,
         $isHealthy
     )
     {
+
         $imageLink = $this->ajouterImage($image);
-        if (empty($imageLink))
+        if (empty($imageLink)) {
+            echo " pas dimage";
             return;
+        }
 
         $videoLink = "";
 
-        if(isset($video)){
+        if (isset($video) && !empty($video)) {
             $videoLink = $this->ajouterVideo($video);
         }
+
+
+        echo $idUser ."<br>";
+echo $nom ."<br>";
+echo $imageLink ."<br>";
+echo $idCategorie ."<br>";
+echo $idDifficulte ."<br>";
+echo $description ."<br>";
+echo $tempsPreparation ."<br>";
+echo $tempsCuisson ."<br>";
+echo $tempsRepos ."<br>";
+echo $videoLink ."<br>";
+echo $isHealthy ."<br>";
+
+
+
 
         $pdo = parent::connexion();
 
@@ -388,27 +410,30 @@ class RecetteModel extends Model
             $pdo->beginTransaction();
 
             $qtf = $pdo->prepare(
-                "INSERT INTO Recette(idUser, titre, image, description, tempsPreparation, tempsCuisson, tempsRepos, video, isHealthy, idEtat, idCategorie)
-                VALUES (:idUser, :titre, :image, :description, :tempsPreparation, :tempsCuisson, :tempsRepos, :video, :isHealthy, 2, :idCategorie);"
+                "INSERT INTO Recette(idUser, titre, image, description, tempsPreparation, tempsCuisson, tempsRepos, video, isHealthy, idEtat, idCategorie, idDifficulte)
+                VALUES (:idUser, :titre, :image, :description, :tempsPreparation, :tempsCuisson, :tempsRepos, :video, :isHealthy, 2, :idCategorie, :idDifficulte);"
             );
 
             $qtf->bindParam(':idUser', $idUser);
-            $qtf->bindParam(':titre', $titre);
+            $qtf->bindParam(':titre', $nom);
             $qtf->bindParam(':image', $imageLink);
+            $qtf->bindParam(':idCategorie', $idCategorie);
+            $qtf->bindParam(':idDifficulte', $idDifficulte);
             $qtf->bindParam(':description', $description);
             $qtf->bindParam(':tempsPreparation', $tempsPreparation);
             $qtf->bindParam(':tempsCuisson', $tempsCuisson);
             $qtf->bindParam(':tempsRepos', $tempsRepos);
             $qtf->bindParam(':video', $videoLink);
             $qtf->bindParam(':isHealthy', $isHealthy);
-            $qtf->bindParam(':idCategorie', $idCategorie);
 
             $qtf->execute();
-            
+
             $recetteId = $pdo->lastInsertId();
-            
-            
-            foreach($ingredients as $ing){
+
+            if ($recetteId <= 0)
+                throw new ErrorException('something went wrong');
+
+            foreach ($ingredients as $ing) {
                 $qtf2 = $pdo->prepare(
                     "INSERT INTO recetteingredient(idRecette, idIngredient, quantite, idUnite)
                     VALUES (:idRecette, :idIngredient, :quantite, :idUnite);"
@@ -423,6 +448,7 @@ class RecetteModel extends Model
             }
 
             $numeroEtape = 1;
+
 
             foreach ($etapes as $etape) {
 
@@ -442,19 +468,37 @@ class RecetteModel extends Model
             }
 
 
+            foreach ($fetes as $fete) {
+                $qtf4 = $pdo->prepare(
+                    "INSERT INTO recettefete(idRecette, idFete)
+                    VALUES (:idRecette, :idFete);"
+                );
+
+                $qtf4->bindParam(':idRecette', $recetteId);
+                $qtf4->bindParam(':idFete', $fete);
+
+                $qtf4->execute();
+            }
+
             $pdo->commit();
-        } catch (\PDOException $e) {
+        } catch (PDOException $e) {
             // rollback the transaction
             $pdo->rollBack();
 
             // show the error message
-            die($e->getMessage());
+            echo "Erreur lors de l'insertion de la recette";
         } finally {
             parent::deconnexion($pdo);
         }
     }
 
-    private function ajouterImage($image){
+    private function ajouterImage($image)
+    {
+
+        if (!is_uploaded_file($image['tmp_name'])) {
+            echo "Image non fournie";
+            return;
+        }
 
         $path_parts = pathinfo(basename($image["name"]));
         $tempname = $image["tmp_name"];
@@ -478,9 +522,9 @@ class RecetteModel extends Model
         $target_dir = "../.." . $folder;
         $now = new DateTime();
         $unixTimeStamp = $now->getTimestamp();
-        $newFileName = str_replace(' ', '_', $path_parts['filename']) ."-". $unixTimeStamp . "." . $path_parts['extension'];
+        $newFileName = str_replace(' ', '_', $path_parts['filename']) . "-" . $unixTimeStamp . "." . $path_parts['extension'];
         $target_file = $target_dir . $newFileName;
-        
+
         if (!move_uploaded_file($tempname, $target_file)) {
             echo "Erreur lors de l'upload de l'image";
             return "";
@@ -489,7 +533,12 @@ class RecetteModel extends Model
         return $folder . $newFileName;
     }
 
-    private function ajouterVideo($video){
+    private function ajouterVideo($video)
+    {
+
+        if (!is_uploaded_file($video['tmp_name'])) {
+            return "";
+        }
 
         $path_parts = pathinfo(basename($video["name"]));
         $tempname = $video["tmp_name"];
@@ -507,9 +556,9 @@ class RecetteModel extends Model
         $target_dir = "../.." . $folder;
         $now = new DateTime();
         $unixTimeStamp = $now->getTimestamp();
-        $newFileName = str_replace(' ', '_', $path_parts['filename']) ."-". $unixTimeStamp . "." . $path_parts['extension'];
+        $newFileName = str_replace(' ', '_', $path_parts['filename']) . "-" . $unixTimeStamp . "." . $path_parts['extension'];
         $target_file = $target_dir . $newFileName;
-        
+
         if (!move_uploaded_file($tempname, $target_file)) {
             echo "Erreur lors de l'upload de la vidéo";
             return "";

@@ -6,19 +6,19 @@ $(document).ready(function () {
     function toggleLogin() {
         if (isLogin) {
             $('#login-form').removeClass('active');
-            $('#login-form input').prop('required',false)
-            
+            $('#login-form input').prop('required', false)
+
             $('#login-form input[type=hidden]').attr('name', 'signup')
             $('#signup-form').addClass('active');
-            $('#signup-form  input, #signup-form select').prop('required',true)
+            $('#signup-form  input, #signup-form select').prop('required', true)
             isLogin = false;
         } else {
             $('#login-form').addClass('active');
-            $('#login-form  input').prop('required',true)
+            $('#login-form  input').prop('required', true)
             $('#login-form input[type=hidden]').attr('name', 'login')
 
             $('#signup-form').removeClass('active');
-            $('#signup-form input, #signup-form select').prop('required',false)
+            $('#signup-form input, #signup-form select').prop('required', false)
             isLogin = true;
         }
     }
@@ -56,7 +56,7 @@ $(document).ready(function () {
 
     function debounce(func, timeout = 300) {
         let timer;
-        return function(...args) {
+        return function (...args) {
             clearTimeout(timer);
             timer = setTimeout(() => { func.apply(this, args); }, timeout);
         };
@@ -65,23 +65,23 @@ $(document).ready(function () {
     $('#idee-section #results').on('mousedown', '.result-item', function () { selectItem($(this).data('id'), $(this).text()) });
     $('#add-recette-form #results').on('mousedown', '.result-item', function () {
         $("<div>").load('./AjouterRecette/AjouterRecette.php?ingredient=' + $(this).data('id') + ' .ingredients>.container>*',
-        function() {
-            $(".ingredients>.container").append($(this).html());
-        })
+            function () {
+                $(".ingredients>.container").append($(this).html());
+            })
         $('#search-phrase').val('');
         removeItems();
         // selectItem($(this).data('id'), $(this).text())
     });
 
-    $('.container').on('click','.remove-ig-recette', function (e) {
+    $('.container').on('click', '.remove-ig-recette', function (e) {
         $(this).closest('div.ingredient').remove();
     })
 
     $('#idee-section #search-phrase').on('keyup focus',
-    debounce(searchIngredientIdeeRecette));
+        debounce(searchIngredientIdeeRecette));
 
     $('#add-recette-form #search-phrase').on('keyup focus',
-    debounce(searchIngredientAjouterRecette));
+        debounce(searchIngredientAjouterRecette));
 
     function searchIngredientIdeeRecette() {
         clearTimeout(debounce);
@@ -149,15 +149,15 @@ $(document).ready(function () {
     });
 
     $('#fete-search-section #search-phrase').on('keyup focus',
-    debounce(function (_) {
-        clearTimeout(debounce);
-        if ($(this).val() === '')
-            removeItems();
-        else {
-            let url = './Fete/Fete.php?q=' + $(this).val()
-            $('#results').load(url + ' .result-item')
-        }
-    }));
+        debounce(function (_) {
+            clearTimeout(debounce);
+            if ($(this).val() === '')
+                removeItems();
+            else {
+                let url = './Fete/Fete.php?q=' + $(this).val()
+                $('#results').load(url + ' .result-item')
+            }
+        }));
 
     // home scroll related stuff
 
@@ -231,15 +231,13 @@ $(document).ready(function () {
     // etapes related stuff 
 
     $('textarea[name=etapes]').on('keyup focus',
-    debounce(function (_) {
-        clearTimeout(debounce);
-        if ($(this).val() !== ''){
+        debounce(function (_) {
+            clearTimeout(debounce);
             let etapes = $(this).val().split(/\n\s*\n/);
-            etapes = etapes.filter(e=>e.trim()!=='\n' && e.trim() !== '');
-            etapes = etapes.map(e=>e.replace(/\n/g, ''))
+            etapes = etapes.filter(e => e.trim() !== '\n' && e.trim() !== '');
+            etapes = etapes.map(e => e.replace(/\n/g, ''))
             $('#apercu-etapes').empty();
-            $('#apercu-etapes').append(etapes.map((e,i)=> i+1 + ' - ' + e).join('<br>'))
-        }
-    }))
+            $('#apercu-etapes').append(etapes.map((e, i) => i + 1 + ' - ' + e).join('<br>'))
+        }))
 
 })

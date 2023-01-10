@@ -495,8 +495,7 @@ table {
 }
 
 table th {
-    background-color: #FCD9BB;
-    padding: 0.5rem;
+    background-color: #FCD9BB !important ;
     font-size: 0.75rem;
     font-weight: 600;
 }
