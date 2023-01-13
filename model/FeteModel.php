@@ -25,7 +25,7 @@ class FeteModel extends Model
             FROM `recettefete` rf
             LEFT Outer JOIN `recette` r
             ON rf.idRecette = r.idRecette
-            where idfete = :idfete"
+            where idfete = :idfete and r.idEtat = 1" 
         );
         
         $qtf->bindParam(':idfete', $idFete);

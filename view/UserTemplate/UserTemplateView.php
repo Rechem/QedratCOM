@@ -1,5 +1,6 @@
 <?php
-class UserTemplateView
+require_once "../SuperTemplate/SuperTemplate.php";
+class UserTemplateView extends SuperTemplateView
 {
     private function showSocialLinks()
     {
@@ -492,8 +493,8 @@ public function showNewsCadre($idNews, $date, $image, $titre, $corps)
     <div class="news-frame">
                             <p><?php
                             $phpdate = strtotime( $date );
-                            $mysqldate = date( ' d/m/Y', $phpdate );
-                            echo $mysqldate
+                            $mysqldate = date( 'd/m/Y', $phpdate );
+                            echo $mysqldate;
                             ?></p>
                             <div class="news-image-preview-frame">
                                 <img src="<?php echo "../..".$image ?>" alt="news-image">

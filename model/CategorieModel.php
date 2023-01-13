@@ -35,7 +35,7 @@ class CategorieModel extends Model
 
         $qtf = $pdo->prepare(
             "SELECT `idRecette`, `titre`,  SUBSTRING(description,1,255) as description, `image` FROM `recette` 
-                WHERE `idCategorie` = :idCategorie
+                WHERE `idCategorie` = :idCategorie AND idEtat = 1
                 LIMIT :limitAmount"
         );
         $qtf->bindParam(':idCategorie', $idCategorie, PDO::PARAM_INT);

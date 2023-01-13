@@ -25,6 +25,16 @@ if (isset($_GET['note'])) {
 }
 
 $recette = $controller->getRecetteById($_GET['id']);
+
+if ($recette['idEtat'] != 1) {
+    if (!isset($_SESSION))
+        header('location: ../Home/Home.php');
+    else {
+        $isAdmin = $controller->isAdmin($_SESSION['id']);
+        if (!$isAdmin)
+            header('location: ../Home/Home.php');
+    }
+}
 ?>
 
 <head>
@@ -72,9 +82,9 @@ $recette = $controller->getRecetteById($_GET['id']);
                                     </div>
                                 </div>
                                 <div class="text-group notation-icon d-flex align-items-start">
-                                    <?php echo $recette['note'];?>
+                                    <?php echo $recette['note']; ?>
                                     <ion-icon name="star" style="margin-top: 3px; margin-left: -4px;"></ion-icon>
-                                    <?php echo "(".$recette['avis']." avis)";?>
+                                    <?php echo "(" . $recette['avis'] . " avis)"; ?>
                                 </div>
                                 <div class="text-group">
                                     <div class="icon-container">
@@ -224,51 +234,51 @@ $recette = $controller->getRecetteById($_GET['id']);
             </section>
             <section id="notation" class="bg-white py-5">
                 <h4 class="mb-4">
-                    <?php 
-                    if(!isset($_SESSION) || !isset($_SESSION['id'])){
+                    <?php
+                    if (!isset($_SESSION) || !isset($_SESSION['id'])) {
                         echo "Connectez-vous pour noter cette recette.";
-                    }else {
-                        if ($controller->getNote($_GET['id']) < 1){
+                    } else {
+                        if ($controller->getNote($_GET['id']) < 1) {
                             echo "Notez cette recette !";
-                    }else{
-                        echo "Votre note : "."<span class=\"primary-color\">".
-                        $controller->getNote($_GET['id'])."</span>";
-                    }?>
-                     </h4>
-                <form action="" method="get" id="form-notation">
-                    <input type="hidden" name="id" value="<?php echo $_GET['id'] ?>">
-                    <div class="d-inline-block text-center">
-                        <input required type="radio" id="note-1" class="me-1 fs-2" name="note" value="1">
-                        <label for="note-1" class="d-block">
-                            <h5>1</h5>
-                        </label>
-                    </div>
-                    <div class="d-inline-block text-center">
-                        <input required type="radio" id="note-2" class="me-1" name="note" value="2">
-                        <label for="note-2" class="d-block">
-                            <h5>2</h5>
-                        </label>
-                    </div>
-                    <div class="d-inline-block text-center">
-                        <input required type="radio" id="note-3" class="me-1" name="note" value="3">
-                        <label for="note-3" class="d-block">
-                            <h5>3</h5>
-                        </label>
-                    </div>
-                    <div class="d-inline-block text-center">
-                        <input required type="radio" id="note-4" class="me-1" name="note" value="4">
-                        <label for="note-4" class="d-block">
-                            <h5>4</h5>
-                        </label>
-                    </div>
-                    <div class="d-inline-block text-center">
-                        <input required type="radio" id="note-5" class="me-1" name="note" value="5">
-                        <label for="note-5" class="d-block">
-                            <h5>5</h5>
-                        </label>
-                    </div>
-                    <button type="submit" class="cta-btn py-2 px-4 ms-3">Noter</button>
-                </form>
+                        } else {
+                            echo "Votre note : " . "<span class=\"primary-color\">" .
+                                $controller->getNote($_GET['id']) . "</span>";
+                        } ?>
+                    </h4>
+                    <form action="" method="get" id="form-notation">
+                        <input type="hidden" name="id" value="<?php echo $_GET['id'] ?>">
+                        <div class="d-inline-block text-center">
+                            <input required type="radio" id="note-1" class="me-1 fs-2" name="note" value="1">
+                            <label for="note-1" class="d-block">
+                                <h5>1</h5>
+                            </label>
+                        </div>
+                        <div class="d-inline-block text-center">
+                            <input required type="radio" id="note-2" class="me-1" name="note" value="2">
+                            <label for="note-2" class="d-block">
+                                <h5>2</h5>
+                            </label>
+                        </div>
+                        <div class="d-inline-block text-center">
+                            <input required type="radio" id="note-3" class="me-1" name="note" value="3">
+                            <label for="note-3" class="d-block">
+                                <h5>3</h5>
+                            </label>
+                        </div>
+                        <div class="d-inline-block text-center">
+                            <input required type="radio" id="note-4" class="me-1" name="note" value="4">
+                            <label for="note-4" class="d-block">
+                                <h5>4</h5>
+                            </label>
+                        </div>
+                        <div class="d-inline-block text-center">
+                            <input required type="radio" id="note-5" class="me-1" name="note" value="5">
+                            <label for="note-5" class="d-block">
+                                <h5>5</h5>
+                            </label>
+                        </div>
+                        <button type="submit" class="cta-btn py-2 px-4 ms-3">Noter</button>
+                    </form>
                 <?php } ?>
             </section>
         </div>

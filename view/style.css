@@ -516,6 +516,10 @@ table td {
     padding: 0.75rem;
 }
 
+.table-bordered>:not(caption)>*>*{
+    border-width : 0 !important;
+}
+
 /* recette page */
 
 #recette-hero .col-sm:nth-child(1) {
@@ -867,19 +871,23 @@ margin-block: 1rem;
 
 /* add recette */
 
-#add-recette-form{
+#add-recette-form,
+#add-ingredient-form{
     width: calc(min(90vw,40rem));
     position: relative;
     margin-inline: auto;
 }
 
 #add-recette-form input:not(input[type=file], input[type=checkbox]),
-#add-recette-form textarea{
+#add-ingredient-form input:not(input[type=file], input[type=checkbox]),
+#add-recette-form textarea,
+#add-ingredient-form textarea{
     padding: 0.5rem;
     width: 100%;
 }
 
-#add-recette-form select{
+#add-recette-form select,
+#add-ingredient-form select{
     padding: 0.5rem;
 }
 
@@ -894,4 +902,77 @@ footer {
     width: 100%;
     background-color: #2B2A28;
     color: white;
+}
+
+
+/* admin part */
+
+.sidebar {
+    background-color: #2B2A28;
+    flex-shrink: 0;
+    width: 16rem;
+    height: 100%;
+}
+
+.sidebar * {
+    color: white;
+}
+
+.sidebar h4 {
+    display: block;
+    padding-block: 3rem;
+    margin-inline: auto;
+}
+
+.sidebar .menu-icon {
+    font-size: 1.4rem;
+}
+
+.sidebar .menu-item {
+    padding-block: 0.5rem;
+    margin-block: 0.5rem;
+    margin-left: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    gap: 1rem;
+}
+
+.sidebar .menu-item:hover * {
+    color: #F27925
+}
+
+.containerZ {
+    position: relative;
+    overflow-y: auto;
+    height: 100vh;
+    width: 100%;
+    min-width: 0;
+    flex: 1 1 auto;
+    display: flex;
+}
+
+.content {
+    padding-inline: 3rem;
+    padding-block: 3rem;
+    position: absolute;
+    width: 100%;
+    min-height: 100vh;
+    max-width: 1366px;
+    left: 50%;
+    transform: translate(-50%, 0);
+    background-color: white;
+}
+
+.plain-submit-btn{
+    border: none;
+    background-color: transparent;
+}
+
+.icon-btn{
+    color : #2B2A28;
+}
+
+.icon-btn:hover {
+    color: #F27925
 }

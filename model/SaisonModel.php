@@ -58,7 +58,7 @@ class SaisonModel extends Model
         ) AS T2
         ON
             recette.idRecette = T2.idRecette
-            WHERE idSaison = :idSaison");
+            WHERE idSaison = :idSaison and recette.idEtat = 1");
 
         $qtf->bindParam(':idSaison', $idSaison);
         $qtf->execute();

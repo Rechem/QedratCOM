@@ -4,6 +4,134 @@ require_once 'IngredientModel.php';
 class RecetteModel extends Model
 {
 
+    public function publishRecette($idRecette)
+    {
+        $pdo = parent::connexion();
+
+        $qtf = $pdo->prepare("UPDATE recette
+                SET idEtat = 1
+                WHERE idRecette = :idRecette");
+
+        $qtf->bindParam(':idRecette', $idRecette);
+        $qtf->execute();
+
+        parent::deconnexion($pdo);
+    }
+
+    public function deleteRecetteById($idRecette){
+        $pdo = parent::connexion();
+
+        $qtf = $pdo->prepare("DELETE FROM `recette` WHERE `recette`.`idRecette` = :idRecette");
+        $qtf->bindParam(':idRecette', $idRecette);
+        $qtf->execute();
+
+        $qtf2 = $pdo->prepare("DELETE FROM `recetteingredient` WHERE `idRecette` = :idRecette");
+        $qtf2->bindParam(':idRecette', $idRecette);
+        $qtf2->execute();
+
+        $qtf3 = $pdo->prepare("DELETE FROM `recettefete` WHERE `idRecette` = :idRecette");
+        $qtf3->bindParam(':idRecette', $idRecette);
+        $qtf3->execute();
+
+        $qtf4 = $pdo->prepare("DELETE FROM `etape` WHERE `idRecette` = :idRecette");
+        $qtf4->bindParam(':idRecette', $idRecette);
+        $qtf4->execute();
+
+        parent::deconnexion($pdo);
+    }
+
+    //admin only
+    public function getAllRecettes(){
+        $pdo = parent::connexion();
+    
+        $qtf = (
+            "SELECT
+            recette.idUser,
+            recette.idEtat,
+            recette.idRecette,
+            recette.titre,
+            (
+                recette.tempsPreparation + recette.tempsCuisson + recette.tempsRepos
+            ) AS tempsTotal,
+            c.nom as nomCategorie,
+            d.nom as nomDifficulte,
+            recette.isHealthy,
+            s.nom as nomSaison,
+            calories,
+            ifnull(note,0) as note, ifnull(avis,0) as avis
+        FROM
+            recette
+        LEFT OUTER JOIN(
+            SELECT
+                T1.idRecette,
+                T1.idSaison
+            FROM
+                (
+                SELECT
+                    idSaison,
+                    COUNT(i.idSaison) AS COUNT,
+                    r.idRecette
+                FROM
+                    recetteingredient ri
+                LEFT OUTER JOIN ingredient i ON
+                    ri.idIngredient = i.idIngredient
+                LEFT OUTER JOIN recette r ON
+                    r.idRecette = ri.idRecette
+                LEFT OUTER JOIN unite u ON
+                    u.idUnite = ri.idUnite
+                GROUP BY
+                    r.idRecette,
+                    i.idSaison
+                HAVING
+                    ! ISNULL(i.idSaison)
+            ) AS t1
+        GROUP BY
+            T1.idRecette
+        ) AS T2
+    ON
+        recette.idRecette = T2.idRecette
+    LEFT OUTER JOIN(
+        SELECT
+            r.idRecette,
+            SUM(
+                i.calories * u.coefficientCalorie * ri.quantite
+            ) AS calories
+        FROM
+            recetteingredient ri
+        LEFT OUTER JOIN ingredient i ON
+            ri.idIngredient = i.idIngredient
+        LEFT OUTER JOIN unite u ON
+            u.idUnite = ri.idUnite
+        LEFT OUTER JOIN recette r ON
+            r.idRecette = ri.idRecette
+        GROUP BY
+            ri.idRecette
+    ) AS T3
+    ON
+        T3.idRecette = recette.idRecette
+    LEFT OUTER JOIN(
+        SELECT idRecette,
+            AVG(note) as note,
+            COUNT(*) AS avis
+        FROM
+            notation
+        GROUP BY
+            idRecette
+    ) AS T5
+    ON
+        T5.idRecette = recette.idRecette
+        LEFT OUTER JOIN difficulte d on d.idDifficulte = recette.idDifficulte
+        LEFT OUTER JOIN categorie c on c.idCategorie = recette.idCategorie
+        LEFT OUTER JOIN saison s on s.idSaison = T2.idSaison
+        ORDER BY recette.idRecette ASC"
+        );
+
+        $result = parent::requette($pdo, $qtf);
+
+        parent::deconnexion($pdo);
+        return $result;
+    }
+
     public function getRecetteById($idRecette)
     {
         $pdo = parent::connexion();
@@ -13,6 +141,7 @@ class RecetteModel extends Model
             titre,
             description,
             image,
+            idEtat,
             tempsPreparation,
             tempsCuisson,
             tempsRepos,
@@ -29,6 +158,7 @@ class RecetteModel extends Model
                 r.idRecette,
                 r.titre,
                 r.description,
+                r.idEtat,
                 r.image,
                 r.tempsPreparation,
                 r.tempsCuisson,
@@ -164,13 +294,13 @@ class RecetteModel extends Model
 
         $pdo = parent::connexion();
 
-        //TODO include notation
         $qtf = $pdo->prepare(
             "SELECT
             idRecette,
             titre,
             SUBSTRING(description, 1, 255) AS description,
-            image
+            image,
+            idEtat
         FROM
             (
             SELECT
@@ -180,6 +310,7 @@ class RecetteModel extends Model
                 recette.image,
                 recette.tempsPreparation,
                 recette.tempsCuisson,
+                recette.idEtat,
                 (
                     recette.tempsPreparation + recette.tempsCuisson + recette.tempsRepos
                 ) AS tempsTotal,
@@ -252,7 +383,8 @@ class RecetteModel extends Model
             T5.idRecette = recette.idRecette
         ) AS T4
             WHERE
-            (CASE WHEN :useRecetteIds = 0 THEN TRUE ELSE FIND_IN_SET(idRecette, :recetteIds) END)
+            idEtat = 1
+            AND (CASE WHEN :useRecetteIds = 0 THEN TRUE ELSE FIND_IN_SET(idRecette, :recetteIds) END)
             AND (CASE WHEN :saisons = -1 THEN TRUE ELSE FIND_IN_SET(idSaison, :saisons)END)
             AND (CASE WHEN :categorie = -1 THEN TRUE ELSE FIND_IN_SET(idCategorie, :categorie) END)
             AND (CASE WHEN :healthy = -1 THEN TRUE ELSE isHealthy = :healthy END)
@@ -346,7 +478,7 @@ class RecetteModel extends Model
         $qtf = $pdo->prepare(
             "SELECT `idRecette`, `titre`, SUBSTRING(`description`,1,255) as description, `image`
             FROM `recette`
-            WHERE `isHealthy` = 1
+            WHERE `isHealthy` = 1 AND `idEtat` = 1
             ORDER BY `idRecette` ASC"
         );
 
@@ -376,33 +508,16 @@ class RecetteModel extends Model
     )
     {
 
-        $imageLink = $this->ajouterImage($image);
+        $imageLink = parent::ajouterImage($image);
         if (empty($imageLink)) {
-            echo " pas dimage";
             return;
         }
 
         $videoLink = "";
 
         if (isset($video) && !empty($video)) {
-            $videoLink = $this->ajouterVideo($video);
+            $videoLink = parent::ajouterVideo($video);
         }
-
-
-        echo $idUser ."<br>";
-echo $nom ."<br>";
-echo $imageLink ."<br>";
-echo $idCategorie ."<br>";
-echo $idDifficulte ."<br>";
-echo $description ."<br>";
-echo $tempsPreparation ."<br>";
-echo $tempsCuisson ."<br>";
-echo $tempsRepos ."<br>";
-echo $videoLink ."<br>";
-echo $isHealthy ."<br>";
-
-
-
 
         $pdo = parent::connexion();
 
@@ -492,80 +607,7 @@ echo $isHealthy ."<br>";
         }
     }
 
-    private function ajouterImage($image)
-    {
-
-        if (!is_uploaded_file($image['tmp_name'])) {
-            echo "Image non fournie";
-            return;
-        }
-
-        $path_parts = pathinfo(basename($image["name"]));
-        $tempname = $image["tmp_name"];
-
-        $imageFileType = strtolower($path_parts['extension']);
-        if (
-            $imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
-        ) {
-            echo "Format incorrect : jpg, jpeg, png seulement";
-            return "";
-        }
-
-        $checkImage = getimagesize($tempname);
-        if (!$checkImage) {
-            echo "Veuillez ajouter une image";
-            return "";
-        }
-
-        $folder = '/public/images/';
-
-        $target_dir = "../.." . $folder;
-        $now = new DateTime();
-        $unixTimeStamp = $now->getTimestamp();
-        $newFileName = str_replace(' ', '_', $path_parts['filename']) . "-" . $unixTimeStamp . "." . $path_parts['extension'];
-        $target_file = $target_dir . $newFileName;
-
-        if (!move_uploaded_file($tempname, $target_file)) {
-            echo "Erreur lors de l'upload de l'image";
-            return "";
-        }
-
-        return $folder . $newFileName;
-    }
-
-    private function ajouterVideo($video)
-    {
-
-        if (!is_uploaded_file($video['tmp_name'])) {
-            return "";
-        }
-
-        $path_parts = pathinfo(basename($video["name"]));
-        $tempname = $video["tmp_name"];
-
-        $imageFileType = strtolower($path_parts['extension']);
-        if (
-            $imageFileType != "mp4" && $imageFileType != "mkv" && $imageFileType != "avi"
-        ) {
-            echo "Format incorrect : mp4, mkv, avi seulement";
-            return "";
-        }
-
-        $folder = '/public/videos/';
-
-        $target_dir = "../.." . $folder;
-        $now = new DateTime();
-        $unixTimeStamp = $now->getTimestamp();
-        $newFileName = str_replace(' ', '_', $path_parts['filename']) . "-" . $unixTimeStamp . "." . $path_parts['extension'];
-        $target_file = $target_dir . $newFileName;
-
-        if (!move_uploaded_file($tempname, $target_file)) {
-            echo "Erreur lors de l'upload de la vidéo";
-            return "";
-        }
-
-        return $folder . $newFileName;
-    }
+    
 
 }
 ?>

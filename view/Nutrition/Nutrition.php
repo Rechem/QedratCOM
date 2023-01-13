@@ -29,7 +29,7 @@ session_start();
                 <table data-toggle="table" id="nutrition-table">
                     <thead>
                         <th data-sortable="true">Ingrédient</th>
-                        <th data-sortable="true">Calories (/100g)</th>
+                        <th data-sortable="true">Calories (100g)</th>
                         <th data-sortable="true">Glucides</th>
                         <th data-sortable="true">Lipides</th>
                         <th data-sortable="true">Minéreaux</th>

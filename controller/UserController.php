@@ -6,7 +6,8 @@ require_once(__DIR__ . '/../model/CategorieModel.php');
 require_once(__DIR__ . '/../model/FeteModel.php');
 require_once(__DIR__ . '/../model/NewsModel.php');
 require_once(__DIR__ . '/../model/UserModel.php');
-class UserController
+require_once "SuperController.php";
+class UserController extends SuperController
 {
     public function getCategories()
     {
@@ -194,44 +195,6 @@ class UserController
     {
         $ingredientModel = new IngredientModel();
         return $ingredientModel->getUnites();
-    }
-
-    public function ajouterRecette(
-        $idUser,
-        $nom,
-        $description,
-        $idCategorie,
-        $idDifficulte,
-        $tempsPreparation,
-        $tempsCuisson,
-        $tempsRepos,
-        $image,
-        $video,
-        $ingredients,
-        $etapes,
-        $fetes,
-        $isHealthy
-    )
-    {
-
-        $recetteModel = new RecetteModel();
-        $recetteModel->ajouterRecette(
-            $idUser,
-            $nom,
-            $description,
-            $idCategorie,
-            $idDifficulte,
-            $tempsPreparation,
-            $tempsCuisson,
-            $tempsRepos,
-            $image,
-            $video,
-            $ingredients,
-            $etapes,
-            $fetes,
-            $isHealthy
-        );
-        return;
     }
 
 }

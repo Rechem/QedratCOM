@@ -29,6 +29,81 @@ class Model
         $pdo = null;
     }
 
+    protected function ajouterImage($image)
+    {
+
+        if (!is_uploaded_file($image['tmp_name'])) {
+            echo "Image non fournie";
+            return"";
+        }
+
+        $path_parts = pathinfo(basename($image["name"]));
+        $tempname = $image["tmp_name"];
+
+        $imageFileType = strtolower($path_parts['extension']);
+        if (
+            $imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+        ) {
+            echo "Format incorrect : jpg, jpeg, png seulement";
+            return "";
+        }
+
+        $checkImage = getimagesize($tempname);
+        if (!$checkImage) {
+            echo "Veuillez ajouter une image";
+            return "";
+        }
+
+        $folder = '/public/images/';
+
+        $target_dir = "../.." . $folder;
+        $now = new DateTime();
+        $unixTimeStamp = $now->getTimestamp();
+        $newFileName = str_replace(' ', '_', $path_parts['filename']) . "-" . $unixTimeStamp . "." . $path_parts['extension'];
+        $target_file = $target_dir . $newFileName;
+
+        if (!move_uploaded_file($tempname, $target_file)) {
+            echo "Erreur lors de l'upload de l'image";
+            return "";
+        }
+
+        return $folder . $newFileName;
+    }
+
+    protected function ajouterVideo($video)
+    {
+
+        if (!is_uploaded_file($video['tmp_name'])) {
+            return "";
+        }
+
+        $path_parts = pathinfo(basename($video["name"]));
+        $tempname = $video["tmp_name"];
+
+        $imageFileType = strtolower($path_parts['extension']);
+        if (
+            $imageFileType != "mp4" && $imageFileType != "mkv" && $imageFileType != "avi"
+        ) {
+            echo "Format incorrect : mp4, mkv, avi seulement";
+            return "";
+        }
+
+        $folder = '/public/videos/';
+
+        $target_dir = "../.." . $folder;
+        $now = new DateTime();
+        $unixTimeStamp = $now->getTimestamp();
+        $newFileName = str_replace(' ', '_', $path_parts['filename']) . "-" . $unixTimeStamp . "." . $path_parts['extension'];
+        $target_file = $target_dir . $newFileName;
+
+        if (!move_uploaded_file($tempname, $target_file)) {
+            echo "Erreur lors de l'upload de la vidéo";
+            return "";
+        }
+
+        return $folder . $newFileName;
+    }
+
 }
 
 ?>

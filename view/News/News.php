@@ -38,7 +38,7 @@ session_start();
                         <h3 class="mt-4 mb-1"><?php echo utf8_encode($news['titre'])?></h3>
                         <p class="mb-4"><?php 
                         $phpdate = strtotime( $news['date'] );
-                        $mysqldate = date( ' d/m/Y H:m', $phpdate );
+                        $mysqldate = date( ' d/m/Y H:i', $phpdate );
                         echo $mysqldate
                         ?></p>
                         <h6 class="mb-4">

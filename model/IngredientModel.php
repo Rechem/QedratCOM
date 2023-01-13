@@ -3,6 +3,57 @@ require_once 'Model.php';
 class IngredientModel extends Model
 {
 
+    public function ajouterIngredient($nom, $calories, $glucides, $lipides, $mineraux, $vitamines, $isHealthy, $idSaison){
+        $pdo = parent::connexion();
+        $qtf = $pdo->prepare(
+            "INSERT INTO Ingredient(nom, calories, glucides, lipides, mineraux, vitamines, isHealthy, idSaison)
+            VALUES (:nom, :calories, :glucides, :lipides, :mineraux, :vitamines, :isHealthy, :idSaison);"
+        );
+        $qtf->bindParam(':nom', $nom);
+        $qtf->bindParam(':calories', $calories);
+        $qtf->bindParam(':glucides', $glucides);
+        $qtf->bindParam(':lipides', $lipides);
+        $qtf->bindParam(':mineraux', $mineraux);
+        $qtf->bindParam(':vitamines', $vitamines);
+        $qtf->bindParam(':isHealthy', $isHealthy);
+        $qtf->bindParam(':idSaison', $idSaison);
+        $qtf->execute();
+        
+        parent::deconnexion($pdo);
+    }
+
+    public function deleteIngredient($idIngredient){
+        $isBeingUsed = $this->isBeingUsed($idIngredient);
+        if ($isBeingUsed)
+            return;
+
+        $pdo = parent::connexion();
+
+        $qtf = $pdo->prepare("DELETE FROM `ingredient` WHERE idIngredient = :idIngredient");
+        $qtf->bindParam(':idIngredient', $idIngredient);
+        $qtf->execute();
+
+        parent::deconnexion($pdo);
+    }
+
+    private function isBeingUsed($idIngredient){
+        $pdo = parent::connexion();
+        $qtf = $pdo->prepare(
+            "SELECT COUNT(*) AS count FROM recetteingredient WHERE idIngredient = :idIngredient"
+        );
+        $qtf->bindParam(':idIngredient', $idIngredient);
+        $qtf->execute();
+        $result = $qtf->fetch();
+
+        if ($result['count'] > 0)
+            $result = true;
+        else
+            $result = false;
+        
+        parent::deconnexion($pdo);
+
+        return $result;
+    }
     
     public function getIngredientsByRecetteId($idRecette)
     {
@@ -62,8 +113,11 @@ class IngredientModel extends Model
     {
         $pdo = parent::connexion();
 
-        $qtf = "SELECT idRecette, idIngredient FROM recetteingredient
-                ORDER BY idRecette ASC";
+        $qtf = "SELECT r.idRecette, idIngredient FROM recette r
+            LEFT OUTER JOIN recetteingredient ri
+            ON r.idRecette = ri.idRecette
+            WHERE idEtat = 1
+            ORDER BY r.idRecette ASC";
 
         $tmp = parent::requette($pdo, $qtf);
         $result = $tmp->fetchAll(PDO::FETCH_GROUP);
