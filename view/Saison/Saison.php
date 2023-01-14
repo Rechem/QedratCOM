@@ -96,7 +96,7 @@ $saison;
     </div>
     <?php
 
-    $view->showFooter();
+    $view->showFooter($controller);
     $view->showScripts();
     ?>
 </body>

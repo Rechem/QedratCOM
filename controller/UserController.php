@@ -137,16 +137,11 @@ class UserController extends SuperController
         return $feteModel->getFetesByName($search, $limit);
     }
 
-    public function login($mail, $password)
-    {
-        $userModel = new UserModel();
-        $userModel->login($mail, $password);
-    }
 
     public function signUp($nom, $prenom, $mail, $sexe, $dateNaissance, $password)
     {
         $userModel = new UserModel();
-        $userModel->signup($nom, $prenom, $mail, $sexe, $dateNaissance, $password);
+        return $userModel->signup($nom, $prenom, $mail, $sexe, $dateNaissance, $password);
     }
 
     public function isFavorite($idRecette)
@@ -179,22 +174,15 @@ class UserController extends SuperController
         return $userModel->getNote($idRecette);
     }
 
-    public function getFavoris($idUser)
-    {
-        $userModel = new UserModel();
-        return $userModel->getFavoris($idUser);
-    }
-
-    public function getRecettesNotes($idUser)
-    {
-        $userModel = new UserModel();
-        return $userModel->getRecettesNotes($idUser);
-    }
-
     public function getUnites()
     {
         $ingredientModel = new IngredientModel();
         return $ingredientModel->getUnites();
+    }
+
+    public function getMenuItems(){
+        $model = new Model();
+        return $model->getMenuItems();
     }
 
 }

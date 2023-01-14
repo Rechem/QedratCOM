@@ -93,7 +93,7 @@ session_start();
         </div>
     </div>
     <?php
-    $view->showFooter();
+    $view->showFooter($controller);
     $view->showScripts();
     ?>
 </body>

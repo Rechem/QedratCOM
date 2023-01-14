@@ -182,6 +182,35 @@ abstract class SuperTemplateView
         </form>
         <?php
     }
+
+    public function showCadre($titre, $description, $image, $id, $notation = -1)
+    {
+        ?>
+        <div class="cadre">
+            <a href=<?php echo "../Recette/Recette.php?id=" . $id ?> class="text-decoration-none">
+                <div class="recette-text-cadre">
+                    <?php
+                    if($notation > 0){
+                    ?>
+                    <div class="d-flex ">
+                        <h5 class="notation-icon stroke-text">
+                            <?php echo $notation;?> <ion-icon name="star"></ion-icon></h5>
+                    </div>
+                    <?php } ?>
+                    <div class="recette-text">
+                        <h5>
+                            <?php echo utf8_encode($titre) ?>
+                        </h5>
+                        <p><?php echo utf8_encode($description) ?></p>
+                    </div>
+                </div>
+                <div class="recette-cadre">
+                    <img src=<?php echo "../.." . $image; ?> alt="image recette">
+                </div>
+            </a>
+        </div>
+    <?php
+    }
 }
 
 ?>

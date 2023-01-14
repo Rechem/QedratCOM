@@ -26,6 +26,10 @@ if (isset($_GET['note'])) {
 
 $recette = $controller->getRecetteById($_GET['id']);
 
+if(!$recette){
+    header('location: ../Home/Home.php');
+}
+
 if ($recette['idEtat'] != 1) {
     if (!isset($_SESSION))
         header('location: ../Home/Home.php');
@@ -284,7 +288,7 @@ if ($recette['idEtat'] != 1) {
         </div>
     </div>
     <?php
-    $view->showFooter();
+    $view->showFooter($controller);
     $view->showScripts();
     ?>
 </body>

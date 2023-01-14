@@ -16,6 +16,17 @@ class AdminController extends SuperController
         return $userModel->getUsers();
     }
 
+    public function getUser($idUser)
+    {
+        $userModel = new UserModel();
+        return $userModel->getUser($idUser);
+    }
+
+    public function getRoleByEmail($mail){
+        $userModel = new UserModel();
+        return $userModel->getRoleByEmail($mail);
+    }
+
     public function deleteRecetteById($idRecette)
     {
         $recetteModel = new RecetteModel();
@@ -25,6 +36,12 @@ class AdminController extends SuperController
     public function ajouterIngredient($nom, $calories, $glucides, $lipides, $mineraux, $vitamines, $isHealthy, $idSaison){
         $ingredientModel = new IngredientModel();
         return $ingredientModel->ajouterIngredient($nom, $calories, $glucides, $lipides, $mineraux, $vitamines, $isHealthy, $idSaison);
+    }
+
+    public function modifierIngredient($idIngredient, $nom, $calories, $glucides, $lipides, $mineraux, $vitamines, $isHealthy, $idSaison)
+    {
+        $ingredientModel = new IngredientModel();
+        return $ingredientModel->modifierIngredient($idIngredient, $nom, $calories, $glucides, $lipides, $mineraux, $vitamines, $isHealthy, $idSaison);
     }
 
     public function deleteIngredient($ingredient){
@@ -40,6 +57,16 @@ class AdminController extends SuperController
     public function deleteNews($idNews){
         $newsModel = new NewsModel();
         return $newsModel->deleteNews($idNews);
+    }
+
+    public function changeUserStatus($idUser, $newStatus){
+        $userModel = new UserModel();
+        return $userModel->changeUserStatus($idUser, $newStatus);
+    }
+
+    public function getIngredientById($id){
+        $ingredientModel = new IngredientModel();
+        return $ingredientModel->getIngredientById($id);
     }
 
 }

@@ -31,7 +31,7 @@ if(isset($_POST['edit'])){
 <body>
     <section class="d-flex">
         <?php
-        $view->showSidebar();
+        $view->showSidebar($_POST['deconnexion']?? NULL);
         ?>
         <div class="containerZ">
             <div class="content">

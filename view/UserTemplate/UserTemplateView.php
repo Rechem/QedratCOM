@@ -6,36 +6,37 @@ class UserTemplateView extends SuperTemplateView
     {
         ?>
         <div id="social-links">
-            <a href="#">
-                <p>
-                    Facebook
-                </p>
+            <a href="#" class="text-decoration-none text-black">
+                
+                <ion-icon name="logo-facebook"></ion-icon>
+                
             </a>
-            <a href="#">
-                <p>
-                    Instagram
-                </p>
+            <a href="#" class="text-decoration-none text-black">
+                
+                <ion-icon name="logo-instagram"></ion-icon>
+                
             </a>
-            <a href="#">
-                <p>
-                    Twitter
-                </p>
+            <a href="#" class="text-decoration-none text-black">
+                
+                <ion-icon name="logo-twitter"></ion-icon>
+                
             </a>
         </div>
     <?php
     }
     public function showHeader($postObject, $controller, $session)
     {
+        $menuItems = $controller->getMenuItems();
         ?>
         <div class="bg-danger d-flex justify-content-center">
         <h6 class="text-white">
             <?php
         if(isset($postObject['signup'])){
-            $controller->signUp($postObject['nom'], $postObject['prenom'],
+            echo $controller->signUp($postObject['nom'], $postObject['prenom'],
             $postObject['mailSignup'], $postObject['sexe'], $postObject['dateNaissance'],
             $postObject['passwordSignup']);
         }else if(isset($postObject['login'])){
-            $controller->login($postObject['mail'], $postObject['password']);
+            echo $controller->login($postObject['mail'], $postObject['password']);
         }else if (isset($postObject['deconnexion'])){
             session_destroy();
             header("Refresh:0");
@@ -104,7 +105,7 @@ class UserTemplateView extends SuperTemplateView
             <div class="boundary">
                 <div id="logo-login">
                     <div id="logo">
-                        <h4>QedratCom</h4>
+                        <img src="../../public/images/logo.png" alt="logo">
                     </div>
                     <?php
                     if (!isset($session) || !isset($session['id'])) {
@@ -130,8 +131,7 @@ class UserTemplateView extends SuperTemplateView
                                 <input type="submit" name="deconnexion" value="Déconnexion"
                                 class="disconnect-button"/>
                             </form>
-                                <!-- <h6 role="button" class="dropdown-item" id="disconnect">Déconnexion</h6> -->
-                            </li>
+                        </li>
                         </ul>
                         </div>
                     <?php
@@ -139,86 +139,40 @@ class UserTemplateView extends SuperTemplateView
                     ?>
                 </div>
                 <nav>
-                    <a href="../Home/Home.php">
-                        <h6>
-                            Accueil
-                        </h6>
-                    </a>
-                    <a href="../News/News.php">
-                        <h6>
-                            News
-                        </h6>
-                    </a>
-                    <a href="../IdeeRecette/IdeeRecette.php">
-                        <h6>
-                            Idées
-                        </h6>
-                    </a>
-                    <a href="../Healthy/Healthy.php">
-                        <h6>
-                            Healthy
-                        </h6>
-                    </a>
-                    <a href="../Saison/Saison.php">
-                        <h6>
-                            Saisons
-                        </h6>
-                    </a>
-                    <a href="../Fete/Fete.php">
-                        <h6>
-                            Fetes
-                        </h6>
-                    </a>
-                    <a href="../Nutrition/Nutrition.php">
-                        <h6>
-                            Nutritions
-                        </h6>
-                    </a>
-                    <a href="../Contact/Contact.php">
-                        <h6>
-                            Contact
-                        </h6>
-                    </a>
+                    <?php
+                    foreach($menuItems as $menuItem){
+                        ?>
+                        <a href="..<?php echo $menuItem['lien'] ?>">
+                            <h6>
+                                <?php echo utf8_encode($menuItem['text']); ?>
+                            </h6>
+                        </a>
+                        <?php
+                    }
+                    ?>
                 </nav>
             </div>
         </header>
     <?php
     }
 
-    public function showCadre($titre, $description, $image, $id, $notation = -1)
+    public function showFooter($controller)
     {
-        ?>
-        <div class="cadre">
-            <a href=<?php echo "../Recette/Recette.php?id=" . $id ?> class="text-decoration-none">
-                <div class="recette-text-cadre">
-                    <?php
-                    if($notation > 0){
-                    ?>
-                    <div class="d-flex ">
-                        <h5 class="notation-icon stroke-text">
-                            <?php echo $notation;?> <ion-icon name="star"></ion-icon></h5>
-                    </div>
-                    <?php } ?>
-                    <div class="recette-text">
-                        <h5>
-                            <?php echo utf8_encode($titre) ?>
-                        </h5>
-                        <p><?php echo utf8_encode($description) ?></p>
-                    </div>
-                </div>
-                <div class="recette-cadre">
-                    <img src=<?php echo "../.." . $image; ?> alt="image recette">
-                </div>
-            </a>
-        </div>
-    <?php
-    }
-
-    public function showFooter()
-    {
+        $menuItems = $controller->getMenuItems();
         ?>
         <footer>
-            <div class="boundary">asas</div>
+            <div class="boundary">
+            <?php
+                    foreach($menuItems as $menuItem){
+                        ?>
+                        <a href="..<?php echo $menuItem['lien'] ?>"
+                        class="text-white mx-2">
+                                <?php echo utf8_encode($menuItem['text']); ?>
+                        </a>
+                        <?php
+                    }
+                    ?>
+            </div>
         </footer>
     <?php
     }

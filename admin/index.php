@@ -1,3 +1,3 @@
 <?php
 
-header('location: ../view/_GestionRecette/GestionRecette.php');
+header('location: ../view/_Connexion/Connexion.php');

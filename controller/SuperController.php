@@ -108,5 +108,23 @@ abstract class SuperController {
         $userModel = new UserModel();
         return $userModel->isAdmin($idUser);
     }
+
+    public function login($mail, $password)
+    {
+        $userModel = new UserModel();
+        return $userModel->login($mail, $password);
+    }
+
+    public function getFavoris($idUser)
+    {
+        $userModel = new UserModel();
+        return $userModel->getFavoris($idUser);
+    }
+
+    public function getRecettesNotes($idUser)
+    {
+        $userModel = new UserModel();
+        return $userModel->getRecettesNotes($idUser);
+    }
 }
 ?>

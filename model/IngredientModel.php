@@ -22,6 +22,34 @@ class IngredientModel extends Model
         parent::deconnexion($pdo);
     }
 
+    public function modifierIngredient($idIngredient, $nom, $calories, $glucides, $lipides, $mineraux, $vitamines, $isHealthy, $idSaison){
+        $pdo = parent::connexion();
+        $qtf = $pdo->prepare(
+            "UPDATE Ingredient SET
+            nom = :nom,
+            calories = :calories,
+            glucides = :glucides,
+            lipides = :lipides,
+            mineraux = :mineraux,
+            vitamines = :vitamines,
+            isHealthy = :isHealthy,
+            idSaison = :idSaison
+            WHERE idIngredient = :idIngredient"
+        );
+        $qtf->bindParam(':idIngredient', $idIngredient);
+        $qtf->bindParam(':nom', $nom);
+        $qtf->bindParam(':calories', $calories);
+        $qtf->bindParam(':glucides', $glucides);
+        $qtf->bindParam(':lipides', $lipides);
+        $qtf->bindParam(':mineraux', $mineraux);
+        $qtf->bindParam(':vitamines', $vitamines);
+        $qtf->bindParam(':isHealthy', $isHealthy);
+        $qtf->bindParam(':idSaison', $idSaison);
+        $qtf->execute();
+        
+        parent::deconnexion($pdo);
+    }
+
     public function deleteIngredient($idIngredient){
         $isBeingUsed = $this->isBeingUsed($idIngredient);
         if ($isBeingUsed)
@@ -104,6 +132,20 @@ class IngredientModel extends Model
         $qtf->bindParam(':ids', $ids);
         $qtf->execute();
         $result = $qtf->fetchAll();
+
+        parent::deconnexion($pdo);
+        return $result;
+    }
+
+    public function getIngredientById($id)
+    {
+        $pdo = parent::connexion();
+
+        $qtf = $pdo->prepare("SELECT * FROM `ingredient`
+                WHERE idIngredient = :id");
+        $qtf->bindParam(':id', $id);
+        $qtf->execute();
+        $result = $qtf->fetch();
 
         parent::deconnexion($pdo);
         return $result;

@@ -93,13 +93,11 @@ class UserModel extends Model
             empty($nom) || empty($prenom) || empty($mail) ||
             empty($sexe) || empty($dateNaissance) || empty($password)
         ) {
-            echo 'Arguments insuffisants';
-            return;
+            return 'Arguments insuffisants';
         }
 
         if ($this->checkExists($mail)) {
-            echo "Cet utilisateur existe déjà.";
-            return;
+            return "Cet utilisateur existe déjà.";
         }
 
         $pdo = parent::connexion();
@@ -119,15 +117,12 @@ class UserModel extends Model
         $isSuccess = $qtf->execute();
 
         if ($isSuccess) {
-            if (!isset($_SESSION)) {
-                session_start();
-            }
-            $_SESSION['id'] = $pdo->lastInsertId();
-            header("Refresh:0");
+            parent::deconnexion($pdo);
+            return "Veuillez attendre que l'administrateur confirme votre compte";
         } else {
-            echo "Une erreur est survenue";
+            parent::deconnexion($pdo);
+            return "Une erreur est survenue";
         }
-        parent::deconnexion($pdo);
     }
 
     public function login($mail, $password)
@@ -135,19 +130,17 @@ class UserModel extends Model
         if (
             empty($mail) || empty($password)
         ) {
-            echo 'Arguments insuffisants';
-            return;
+            return 'Arguments insuffisants';
         }
 
         if (!$this->checkExists($mail)) {
-            echo "Cet utilisateur n'existe pas.";
-            return;
+            return "Cet utilisateur n'existe pas.";
         }
 
         $pdo = parent::connexion();
 
         $qtf = $pdo->prepare(
-            "SELECT idUser, motDePasse FROM utilisateur
+            "SELECT idUser, motDePasse, idStatusUtilisateur FROM utilisateur
             WHERE mail = :mail"
         );
 
@@ -157,15 +150,20 @@ class UserModel extends Model
         $isLegit = password_verify($password, $result['motDePasse']);
 
         if ($isLegit) {
+            if($result['idStatusUtilisateur'] != 1 ){
+                parent::deconnexion($pdo);
+                return "Compte non comfirmé";
+            }
             if (!isset($_SESSION)) {
                 session_start();
             }
             $_SESSION['id'] = $result['idUser'];
+            parent::deconnexion($pdo);
             header("Refresh:0");
-        } else {
-            echo "Mot de passe érroné";
+        } else{
+            parent::deconnexion($pdo);
+            return "Mot de passe érroné";
         }
-        parent::deconnexion($pdo);
     }
 
     public function checkNotationExists($idRecette, $idUser)
@@ -314,17 +312,23 @@ class UserModel extends Model
         $pdo = parent::connexion();
 
         $qtf = $pdo->prepare(
-        "SELECT
-            nom,
-            prenom,
-            mail,
-            idUser,
-            idStatusUtilisateur,
-            idRole
-        FROM
-            utilisateur
-        WHERE
-            idUser = :idUser ");
+            "SELECT
+        u.nom,
+        prenom,
+        mail,
+        idUser,
+        su.idStatusUtilisateur,
+        role.idRole,
+        nomRole,
+        su.nom as status
+    FROM
+        utilisateur u
+    LEFT OUTER JOIN role ON role.idRole = u.idRole
+    LEFT OUTER JOIN statusutilisateur su ON
+    su.idStatusUtilisateur = u.idStatusUtilisateur
+    WHERE
+        idUser = :idUser "
+        );
 
         $qtf->bindParam(':idUser', $idUser);
         $qtf->execute();
@@ -335,7 +339,30 @@ class UserModel extends Model
         return $result;
     }
 
-    public function isAdmin($idUser){
+    public function getRoleByEmail($mail)
+    {
+        $pdo = parent::connexion();
+
+        $qtf = $pdo->prepare(
+            "SELECT
+            idRole
+        FROM
+            utilisateur
+        WHERE
+            mail = :mail "
+        );
+
+        $qtf->bindParam(':mail', $mail);
+        $qtf->execute();
+        $result = $qtf->fetch();
+
+        parent::deconnexion($pdo);
+
+        return $result;
+    }
+
+    public function isAdmin($idUser)
+    {
         $user = $this->getUser($idUser);
 
         if (!$user)
@@ -345,6 +372,23 @@ class UserModel extends Model
             return true;
         else
             return false;
+    }
+
+    public function changeUserStatus($idUser, $newStatus)
+    {
+        if ($newStatus > 3 || $newStatus < 1)
+            return;
+        $pdo = parent::connexion();
+
+        $qtf = $pdo->prepare("UPDATE utilisateur
+                SET idStatusUtilisateur = :newStatus
+                WHERE idUser = :idUser");
+
+        $qtf->bindParam(':newStatus', $newStatus);
+        $qtf->bindParam(':idUser', $idUser);
+        $qtf->execute();
+
+        parent::deconnexion($pdo);
     }
 
 }

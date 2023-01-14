@@ -3,43 +3,54 @@ require_once "../SuperTemplate/SuperTemplate.php";
 class AdminTemplateView extends SuperTemplateView
 {
 
-    public function showSidebar()
+    public function showSidebar($deconnexion)
     {
+        if (isset($deconnexion)){
+            session_destroy();
+            header("location: ../Home/Home.php");
+        }
         ?>
         <div class="sidebar">
-            <div class="d-flex align-items-center justify-content-between">
-                <h4>QedratCOM</h4>
+            <div>
+                <div class="d-flex align-items-center justify-content-center my-5">
+                    <div id="logo" style="height: 4rem;">
+                        <img src="../../public/images/logo.png" alt="logo">
+                    </div>
+                </div>
+                <a href="../_GestionRecette/GestionRecette.php" class="text-decoration-none">
+                    <div class="menu-item">
+                        <ion-icon name="fast-food-outline" class="menu-icon"></ion-icon>
+                        <h5>Recettes</h5>
+                    </div>
+                </a>
+                <a href="../_GestionNutrition/GestionNutrition.php" class="text-decoration-none">
+                    <div class="menu-item" role="button">
+                        <ion-icon name="nutrition-outline" class="menu-icon"></ion-icon>
+                        <h5>Nutrition</h5>
+                    </div>
+                </a>
+                <a href="../_GestionNews/GestionNews.php" class="text-decoration-none">
+                    <div class="menu-item" role="button">
+                        <ion-icon name="newspaper-outline" class="menu-icon"></ion-icon>
+                        <h5>NEWS</h5>
+                    </div>
+                </a>
+                <a href="../_GestionUsers/GestionUsers.php" class="text-decoration-none">
+                    <div class="menu-item" role="button">
+                        <ion-icon name="people-outline" class="menu-icon"></ion-icon>
+                        <h5>Utilisateurs</h5>
+                    </div>
+                </a>
+                <a href="../_Parametres/Parametres.php" class="text-decoration-none">
+                    <div class="menu-item" role="button">
+                        <ion-icon name="settings-outline" class="menu-icon"></ion-icon>
+                        <h5>Paramètres</h5>
+                    </div>
+                </a>
             </div>
-            <a href="../_GestionRecette/GestionRecette.php" class="text-decoration-none">
-                <div class="menu-item">
-                    <ion-icon name="fast-food-outline" class="menu-icon"></ion-icon>
-                    <h5>Recettes</h5>
-                </div>
-            </a>
-            <a href="../_GestionNutrition/GestionNutrition.php" class="text-decoration-none">
-                <div class="menu-item" role="button">
-                    <ion-icon name="nutrition-outline" class="menu-icon"></ion-icon>
-                    <h5>Nutrition</h5>
-                </div>
-            </a>
-            <a href="../_GestionNews/GestionNews.php" class="text-decoration-none">
-                <div class="menu-item" role="button">
-                    <ion-icon name="newspaper-outline" class="menu-icon"></ion-icon>
-                    <h5>NEWS</h5>
-                </div>
-            </a>
-            <a href="../_GestionUsers/GestionUsers.php" class="text-decoration-none">
-                <div class="menu-item" role="button">
-                    <ion-icon name="people-outline" class="menu-icon"></ion-icon>
-                    <h5>Utilisateurs</h5>
-                </div>
-            </a>
-            <a href="../_Parametres/Parametres.php" class="text-decoration-none">
-                <div class="menu-item" role="button">
-                    <ion-icon name="settings-outline" class="menu-icon"></ion-icon>
-                    <h5>Paramètres</h5>
-                </div>
-            </a>
+            <form action="" method="post" class="dropdown-item d-flex justify-content-center mb-3">
+                <input type="submit" name="deconnexion" value="Déconnexion" class="disconnect-button text-danger"/>
+            </form>
         </div>
         <?php
     }
@@ -92,5 +103,7 @@ class AdminTemplateView extends SuperTemplateView
                 return (int) ($minutes / 60) . " heure(s) " . ($minutes % 60) . " minute";
         }
     }
+
+
 }
 ?>

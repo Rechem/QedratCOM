@@ -15,6 +15,11 @@ session_start();
 $fixedCategorie = $_GET['categorie'];
 
 $categorie = $controller->getCategorieById($_GET['categorie']);
+
+if(!$categorie){
+    header('location: ../Home/Home.php');
+}
+
 $recettes = $controller->filterSortRecettes($_GET, $fixedCategorie);
 
 
@@ -76,7 +81,7 @@ $recettes = $controller->filterSortRecettes($_GET, $fixedCategorie);
         </section>
     </div>
     <?php
-    $view->showFooter();
+    $view->showFooter($controller);
     $view->showScripts();
     ?>
 </body>

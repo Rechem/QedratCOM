@@ -79,7 +79,7 @@ if (isset($_POST['submit'])) {
     </div>
     <?php
 
-    $view->showFooter();
+    $view->showFooter($controller);
     $view->showScripts();
     ?>
 </body>

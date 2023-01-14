@@ -11,6 +11,11 @@ if(!$controller->isAdmin($_SESSION['id'] ?? -1)){
     header('location: ../Home/Home.php');
 }
 
+if (isset($_POST['confirm'])){
+    $controller->changeUserStatus($_POST['id'], 1);
+} else if (isset($_POST['ban'])) {
+    $controller->changeUserStatus($_POST['id'], 3);
+}
 
 ?>
 
@@ -25,7 +30,7 @@ if(!$controller->isAdmin($_SESSION['id'] ?? -1)){
 <body>
     <section class="d-flex">
         <?php
-        $view->showSidebar();
+        $view->showSidebar($_POST['deconnexion']?? NULL);
         ?>
         <div class="containerZ">
             <div class="content">
@@ -66,7 +71,7 @@ if(!$controller->isAdmin($_SESSION['id'] ?? -1)){
                                         </button>
                                         <?php if ($row['idStatusUtilisateur'] != 1) { ?>
                                             <button class="plain-submit-btn icon-btn" type="submit"
-                                            name="publish">
+                                            name="confirm">
                                                 <ion-icon name="checkmark"></ion-icon>
                                             </button>
                                         <?php } ?>

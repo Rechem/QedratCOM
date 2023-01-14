@@ -68,7 +68,7 @@ $idUser = $_SESSION['id'];
     </div>
     <?php
 
-    $view->showFooter();
+    $view->showFooter($controller);
     $view->showScripts();
     ?>
 </body>

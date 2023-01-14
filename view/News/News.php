@@ -30,6 +30,9 @@ session_start();
                 <?php
                 if (isset($_GET['news']) && !empty($_GET['news'])) {
                     $news = $controller->getNewsById($_GET['news']);
+                    if(!$news){
+                        header('location: ../Home/Home.php');
+                    }
                     ?>
                     <div class="news">
                         <div class="news-image-frame">
@@ -86,7 +89,7 @@ session_start();
     </div>
     <?php
 
-    $view->showFooter();
+    $view->showFooter($controller);
     $view->showScripts();
     ?>
 </body>

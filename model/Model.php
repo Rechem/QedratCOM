@@ -104,6 +104,16 @@ class Model
         return $folder . $newFileName;
     }
 
+    public function getMenuItems(){
+        $pdo = $this->connexion();
+
+        $qtf = "SELECT * from menu";
+        $result = $this->requette($pdo, $qtf);
+
+        $this->deconnexion($pdo);
+        return $result;
+    }
+
 }
 
 ?>
