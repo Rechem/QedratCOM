@@ -35,15 +35,15 @@ if (isset($_POST['confirm'])){
         <div class="containerZ">
             <div class="content">
                 <h4 class="mb-5">Utilisateurs</h4>
-                <table data-toggle="table" id="nutrition-table">
+                <table data-toggle="table" id="nutrition-table" data-search="true">
                     <thead>
                         <th data-sortable="true">idUser</th>
                         <th data-sortable="true">Nom</th>
                         <th data-sortable="true">Prénom</th>
                         <th data-sortable="true">Mail</th>
                         <th data-sortable="true">Sexe</th>
-                        <th data-sortable="true">Status</th>
                         <th data-sortable="true">Role</th>
+                        <th data-sortable="true">Status</th>
                         <th></th>
                     </thead>
                     <tbody>
@@ -57,8 +57,8 @@ if (isset($_POST['confirm'])){
                             echo "<td>" . utf8_encode($row['prenom']) . "</td>";
                             echo "<td>" . utf8_encode($row['mail']) . "</td>";
                             echo "<td>" . utf8_encode($row['sexe']) . "</td>";
-                            echo "<td>" . utf8_encode($row['nomStatus']) . "</td>";
                             echo "<td>" . utf8_encode($row['nomRole']) . "</td>";
+                            echo "<td>" . utf8_encode($row['nomStatus']) . "</td>";
 
                             ?>
                             <td style="font-size: 1.2rem">

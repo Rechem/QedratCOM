@@ -11,9 +11,7 @@ if (!$controller->isAdmin($_SESSION['id'] ?? -1)) {
     header('location: ../Home/Home.php');
 }
 
-if (isset($_POST['edit'])) {
-    // inchallah
-} else if (isset($_POST['delete'])) {
+if (isset($_POST['delete'])) {
     $controller->deleteIngredient($_POST['id']);
 }
 
@@ -40,7 +38,7 @@ if (isset($_POST['edit'])) {
                         <a href="AjouterIngredient.php" class="text-button">Ajouter un ingrédient</a>
                     </h5>
                 </div>
-                <table data-toggle="table" id="nutrition-table">
+                <table data-toggle="table" id="nutrition-table" data-search="true"> 
                     <thead>
                         <th data-sortable="true">Id</th>
                         <th data-sortable="true">Ingrédient</th>
@@ -73,9 +71,10 @@ if (isset($_POST['edit'])) {
                                 <div class="d-flex justify-content-evenly" style="gap:0.5rem;">
                                     <form action="" method="post" class="d-flex" style="gap:0.5rem;">
                                         <input type="hidden" name="id" value="<?php echo $rows['idIngredient']; ?>">
-                                        <button class="plain-submit-btn icon-btn" type="submit" name="edit">
+                                        <a href="AjouterIngredient.php?edit=<?php echo $rows['idIngredient']; ?>"
+                                        class="text-decoration-none icon-btn">
                                             <ion-icon name="pencil"></ion-icon>
-                                        </button>
+                                        </a>
                                         <button class="plain-submit-btn icon-btn" type="submit" name="delete">
                                             <ion-icon name="trash"></ion-icon>
                                         </button>

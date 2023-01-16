@@ -444,7 +444,7 @@ public function showNewsCadre($idNews, $date, $image, $titre, $corps)
 {
     ?>
         <a href="<?php echo "../News/News.php?news=".$idNews ?>" class="text-decoration-none">
-    <div class="news-frame">
+                    <div class="news-frame">
                             <p><?php
                             $phpdate = strtotime( $date );
                             $mysqldate = date( 'd/m/Y', $phpdate );

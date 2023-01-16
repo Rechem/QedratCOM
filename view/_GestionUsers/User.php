@@ -91,6 +91,9 @@ if (!$user) {
                                     <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab"
                                         data-bs-target="#nav-profile" type="button" role="tab"
                                         aria-controls="nav-profile" aria-selected="false">Notations</button>
+                                    <button class="nav-link" id="nav-recette-tab" data-bs-toggle="tab"
+                                        data-bs-target="#nav-recette" type="button" role="tab"
+                                        aria-controls="nav-recette" aria-selected="false">Recettes ajoutées</button>
                                 </div>
                             </nav>
                             <div class="tab-content" id="nav-tabContent">
@@ -101,7 +104,7 @@ if (!$user) {
                                         $recettes = $controller->getFavoris($user['idUser']);
                                         $firstRow = true;
                                         for ($i = 0; $i < count($recettes); $i++) {
-                                            if ($i % 4 == 0) {
+                                            if ($i % 3 == 0) {
                                                 if (!$firstRow)
                                                     echo "</div>";
                                                 else
@@ -110,7 +113,7 @@ if (!$user) {
                                             }
                                             ?>
                                             <div class="col-lg-4 col p-3">
-                                                <div>
+                                                <div class="d-flex align-items-center justify-content-center">
                                                     <?php
                                                     $view->showCadre($recettes[$i]['titre'], $recettes[$i]['description'], $recettes[$i]['image'], $recettes[$i]['idRecette']);
                                                     ?>
@@ -125,13 +128,13 @@ if (!$user) {
                                     </div>
                                 </div>
                                 <div class="tab-pane" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab"
-                                    tabindex="0">
+                                    tabindex="1">
                                     <div class="container">
                                         <?php
                                         $recettes = $controller->getRecettesNotes($user['idUser']);
                                         $firstRow = true;
                                         for ($i = 0; $i < count($recettes); $i++) {
-                                            if ($i % 4 == 0) {
+                                            if ($i % 3 == 0) {
                                                 if (!$firstRow)
                                                     echo "</div>";
                                                 else
@@ -140,9 +143,39 @@ if (!$user) {
                                             }
                                             ?>
                                             <div class="col-lg-4 col p-3">
-                                                <div>
+                                                <div class="d-flex align-items-center justify-content-center">
                                                     <?php
                                                     $view->showCadre($recettes[$i]['titre'], $recettes[$i]['description'], $recettes[$i]['image'], $recettes[$i]['idRecette'], $recettes[$i]['note']);
+                                                    ?>
+                                                </div>
+                                            </div>
+                                            <?php
+                                        }
+                                        if (!$firstRow) {
+                                            echo "</div>";
+                                        }
+                                        ?>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="nav-recette" role="tabpanel" aria-labelledby="nav-recette-tab"
+                                    tabindex="2">
+                                    <div class="container">
+                                        <?php
+                                        $recettes = $controller->getRecetteByUser($user['idUser']);
+                                        $firstRow = true;
+                                        for ($i = 0; $i < count($recettes); $i++) {
+                                            if ($i % 3 == 0) {
+                                                if (!$firstRow)
+                                                    echo "</div>";
+                                                else
+                                                    $firstRow = false;
+                                                echo "<div class=\"row\">";
+                                            }
+                                            ?>
+                                            <div class="col-lg-4 col p-3">
+                                                <div class="d-flex align-items-center justify-content-center">
+                                                    <?php
+                                                    $view->showCadre($recettes[$i]['titre'], $recettes[$i]['description'], $recettes[$i]['image'], $recettes[$i]['idRecette']);
                                                     ?>
                                                 </div>
                                             </div>

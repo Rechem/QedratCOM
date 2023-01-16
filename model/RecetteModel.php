@@ -57,6 +57,7 @@ class RecetteModel extends Model
             d.nom as nomDifficulte,
             recette.isHealthy,
             s.nom as nomSaison,
+            e.nom as etat,
             calories,
             ifnull(note,0) as note, ifnull(avis,0) as avis
         FROM
@@ -123,6 +124,7 @@ class RecetteModel extends Model
         LEFT OUTER JOIN difficulte d on d.idDifficulte = recette.idDifficulte
         LEFT OUTER JOIN categorie c on c.idCategorie = recette.idCategorie
         LEFT OUTER JOIN saison s on s.idSaison = T2.idSaison
+        LEFT OUTER JOIN etat e on e.idEtat = recette.idEtat
         ORDER BY recette.idRecette ASC"
         );
 
@@ -607,7 +609,25 @@ class RecetteModel extends Model
         }
     }
 
-    
+    public function getRecetteByUser($idUser)
+    {
+        $pdo = parent::connexion();
+
+        $qtf = $pdo->prepare(
+            "SELECT idRecette,
+            titre,
+            SUBSTRING(description, 1, 255) AS description,
+            image
+            FROM recette
+            Where idUser = :idUser"
+        );
+        $qtf->bindParam(':idUser', $idUser);
+        $qtf->execute();
+        $result = $qtf->fetchAll();
+
+        parent::deconnexion($pdo);
+        return $result;
+    }
 
 }
 ?>

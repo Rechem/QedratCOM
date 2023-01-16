@@ -23,19 +23,31 @@ session_start();
 <body>
     <div>
         <?php
-        
+
         $view->showHeader($_POST, $controller, $_SESSION);
         ?>
         <div class="boundary">
             <section>
                 <div id="carousselControls" class="carousel slide" data-bs-ride="carousel">
                     <div class="carousel-inner">
-                        <div class="carousel-item active">
-                            <img class="d-block w-100" src="../../public/images/image1.jpg" alt="First slide">
-                        </div>
-                        <div class="carousel-item">
-                            <img class="d-block w-100" src="../../public/images/image2.jpg" alt="Second slide">
-                        </div>
+                        <?php
+                        $diapos = $controller->getDiapos();
+                        $firstActive = true;
+                        foreach ($diapos as $diapo) {
+                            ?>
+                            <a href="..<?php echo $diapo['lien']; ?>">
+
+                                <div class="carousel-item <?php if ($firstActive) {
+                                    echo "active";
+                                    $firstActive = false;
+                                } ?>">
+                                    <img class="d-block w-100" src="../..<?php echo $diapo['image']; ?>"
+                                    alt="diapo">
+                                </div>
+                            </a>
+                            <?php
+                        }
+                        ?>
                     </div>
                     <button class="carousel-control-prev" type="button" data-bs-target="#carousselControls"
                         data-bs-slide="prev">
@@ -56,37 +68,36 @@ session_start();
                 <?php
                 $categories = $controller->getCategories();
                 foreach ($categories as $row) {
-                ?>
-                <div class="categorie">
-                    <div class="categorie-header">
-                        <h4><?php echo utf8_encode($row['nom']) ?></h4>
-                        <p>
-                            <a href=<?php
-                    echo "../Categorie/Categorie.php?categorie=" . $row['idCategorie'];
-                            ?>
-                            >
-                                afficher plus
-                            </a>
-                        </p>
+                    ?>
+                    <div class="categorie">
+                        <div class="categorie-header">
+                            <h4><?php echo utf8_encode($row['nom']) ?></h4>
+                            <p>
+                                <a href=<?php
+                                echo "../Categorie/Categorie.php?categorie=" . $row['idCategorie'];
+                                ?>>
+                                    afficher plus
+                                </a>
+                            </p>
+                        </div>
+                        <div class="cadres-container">
+                            <div class="left-swipe-btn swipe-buttons">
+                                <ion-icon name="chevron-back-outline"></ion-icon>
+                            </div>
+                            <div class="right-swipe-btn swipe-buttons">
+                                <ion-icon name="chevron-forward-outline"></ion-icon>
+                            </div>
+                            <div class="horizental-scroll">
+                                <?php
+                                $recettes = $controller->getRecetteByCategorie($row['idCategorie'], 10);
+                                foreach ($recettes as $row) {
+                                    $view->showCadre($row['titre'], $row['description'], $row['image'], $row['idRecette']);
+                                }
+                                ?>
+                            </div>
+                        </div>
                     </div>
-                    <div class="cadres-container">
-                        <div class="left-swipe-btn swipe-buttons">
-                            <ion-icon name="chevron-back-outline"></ion-icon>
-                        </div>
-                        <div class="right-swipe-btn swipe-buttons">
-                            <ion-icon name="chevron-forward-outline"></ion-icon>
-                        </div>
-                        <div class="horizental-scroll">
-                            <?php
-                    $recettes = $controller->getRecetteByCategorie($row['idCategorie'], 10);
-                    foreach ($recettes as $row) {
-                        $view->showCadre($row['titre'], $row['description'], $row['image'], $row['idRecette']);
-                    }
-                            ?>
-                        </div>
-                    </div>
-                </div>
-                <?php
+                    <?php
                 }
                 ?>
             </section>

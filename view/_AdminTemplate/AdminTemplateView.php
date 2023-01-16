@@ -5,7 +5,7 @@ class AdminTemplateView extends SuperTemplateView
 
     public function showSidebar($deconnexion)
     {
-        if (isset($deconnexion)){
+        if (isset($deconnexion)) {
             session_destroy();
             header("location: ../Home/Home.php");
         }
@@ -41,6 +41,12 @@ class AdminTemplateView extends SuperTemplateView
                         <h5>Utilisateurs</h5>
                     </div>
                 </a>
+                <a href="../_Messages/Messages.php" class="text-decoration-none">
+                    <div class="menu-item" role="button">
+                        <ion-icon name="chatbubble-outline"></ion-icon>
+                        <h5>Messages</h5>
+                    </div>
+                </a>
                 <a href="../_Parametres/Parametres.php" class="text-decoration-none">
                     <div class="menu-item" role="button">
                         <ion-icon name="settings-outline" class="menu-icon"></ion-icon>
@@ -49,7 +55,7 @@ class AdminTemplateView extends SuperTemplateView
                 </a>
             </div>
             <form action="" method="post" class="dropdown-item d-flex justify-content-center mb-3">
-                <input type="submit" name="deconnexion" value="Déconnexion" class="disconnect-button text-danger"/>
+                <input type="submit" name="deconnexion" value="Déconnexion" class="disconnect-button text-danger" />
             </form>
         </div>
         <?php

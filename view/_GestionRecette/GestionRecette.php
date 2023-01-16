@@ -41,7 +41,7 @@ if(isset($_POST['edit'])){
                         <a href="AjouterRecette.php" class="text-button">Ajouter une recette</a>
                     </h5>
                 </div>
-                <table id="admin-recette-table" data-toggle="table">
+                <table id="admin-recette-table" data-toggle="table" data-search="true">
                     <thead>
                         <th data-sortable="true">Id</th>
                         <th data-sortable="true">User</th>
@@ -53,6 +53,7 @@ if(isset($_POST['edit'])){
                         <th data-sortable="true">Healthy</th>
                         <th data-sortable="true">Saison</th>
                         <th data-sortable="true">Note</th>
+                        <th data-sortable="true">Etat</th>
                         <th></th>
                     </thead>
                     <tbody>
@@ -70,6 +71,7 @@ if(isset($_POST['edit'])){
                             echo "<td>" . ($row['isHealthy'] == 1 ? 'Oui' : 'Non') . "</td>";
                             echo "<td>" . utf8_encode(empty($row['nomSaison']) ? '-' : $row['nomSaison']) . "</td>";
                             echo "<td>" . $row['note'] . " (" . $row['avis'] . ")" . "</td>";
+                            echo "<td>" . utf8_encode($row['etat']) . "</td>";
                             ?>
                             <td style="font-size: 1.2rem">
                                 <div class="d-flex justify-content-evenly" style="gap:0.5rem;">

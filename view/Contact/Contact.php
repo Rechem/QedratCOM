@@ -7,6 +7,14 @@ require_once '../../controller/UserController.php';
 $view = new UserTemplateView();
 $controller = new UserController();
 session_start();
+
+
+
+?>
+<?php
+if(isset($_POST['submit'])){
+$controller->ajouterMessage($_POST['nomprenom'], $_POST['email'], $_POST['message']);
+}
 ?>
 
 <head>
@@ -32,17 +40,17 @@ session_start();
                     <h6 class="mb-1">
                         Nom et prénom
                     </h6>
-                    <input type="text" name="nom" class="mb-3">
+                    <input type="text" name="nomprenom" class="mb-3" required>
                     <h6 class="mb-1">
                         Email
                     </h6>
-                    <input type="text" name="mail" class="mb-3">
+                    <input type="email" name="email" class="mb-3" required>
                     <h6 class="mb-1">
                         Message
                     </h6>
-                    <textarea name="message" id="" rows="3" class="mb-3"></textarea>
+                    <textarea name="message" id="" rows="3" class="mb-3" required></textarea>
                     <div class="d-flex justify-content-end">
-                        <button type="submit" class="cta-btn" style="padding-block: 0.5rem;">Envoyer</button>
+                        <button type="submit" name="submit" class="cta-btn" style="padding-block: 0.5rem;">Envoyer</button>
                     </div>
                 </form>
             </section>

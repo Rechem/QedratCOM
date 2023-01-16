@@ -26,7 +26,7 @@ session_start();
         <div class="boundary">
             <section id="nutrition-section" class="section-padding bg-white">
                 <h3 class="mb-5">Nutritions</h3>
-                <table data-toggle="table" id="nutrition-table">
+                <table data-toggle="table" id="nutrition-table" data-search="true">
                     <thead>
                         <th data-sortable="true">Ingrédient</th>
                         <th data-sortable="true">Calories (100g)</th>

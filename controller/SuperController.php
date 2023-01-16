@@ -7,6 +7,7 @@ require_once(__DIR__ . '/../model/CategorieModel.php');
 require_once(__DIR__ . '/../model/FeteModel.php');
 require_once(__DIR__ . '/../model/NewsModel.php');
 require_once(__DIR__ . '/../model/UserModel.php');
+require_once(__DIR__ . '/../model/Model.php');
 abstract class SuperController {
     public function getCategories()
     {
@@ -125,6 +126,16 @@ abstract class SuperController {
     {
         $userModel = new UserModel();
         return $userModel->getRecettesNotes($idUser);
+    }
+
+    public function getDiapos(){
+        $model = new Model();
+        return $model->getDiapos();
+    }
+
+    public function ajouterMessage($nomprenom, $mail, $message){
+        $userModel = new UserModel();
+        return $userModel->ajouterMessage($nomprenom, $mail, $message);
     }
 }
 ?>

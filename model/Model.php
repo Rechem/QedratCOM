@@ -114,6 +114,79 @@ class Model
         return $result;
     }
 
+    public function getDiapos(){
+        $pdo = $this->connexion();
+
+        $qtf = "SELECT * from diaporama";
+        $result = $this->requette($pdo, $qtf);
+
+        $this->deconnexion($pdo);
+        return $result;
+    }
+
+    public function ajouterDiapo($lien, $image){
+        $imageLink = $this->ajouterImage($image);
+        if (empty($imageLink)) {
+            return;
+        }
+
+        $pdo = $this->connexion();
+        $qtf = $pdo->prepare(
+            "INSERT INTO diaporama(image, lien)
+            VALUES (:image, :lien);"
+        );
+        $qtf->bindParam(':image', $imageLink);
+        $qtf->bindParam(':lien', $lien);
+        $qtf->execute();
+        
+        $this->deconnexion($pdo);
+    }
+
+    public function supprimerDiapo($idDiaporama){
+        $pdo = $this->connexion();
+
+        $qtf = $pdo->prepare("DELETE FROM `diaporama` WHERE `diaporama`.`idDiaporama` = :idDiaporama");
+        $qtf->bindParam(':idDiaporama', $idDiaporama);
+        $qtf->execute();
+
+        $this->deconnexion($pdo);
+    }
+
+    public function ajouterMessage($nomprenom, $mail, $message){
+
+        $pdo = $this->connexion();
+        $qtf = $pdo->prepare(
+            "INSERT INTO `message` (`idMessage`, `nomprenom`, `email`, `message`)
+            VALUES (NULL, :nomprenom, :email, :message);"
+        );
+        $qtf->bindParam(':nomprenom', $nomprenom);
+        $qtf->bindParam(':email', $mail);
+        $qtf->bindParam(':message', $message);
+        $qtf->execute();
+        
+        $this->deconnexion($pdo);
+    }
+
+    public function getMessages(){
+        $pdo = $this->connexion();
+
+        $qtf = "SELECT * from message";
+        $result = $this->requette($pdo, $qtf);
+
+        $this->deconnexion($pdo);
+        return $result;
+    }
+
+    public function supprimerMessage($idMessage){
+        $pdo = $this->connexion();
+
+        $qtf = $pdo->prepare("DELETE FROM `message` WHERE `message`.`idMessage` = :idMessage");
+        $qtf->bindParam(':idMessage', $idMessage);
+        $qtf->execute();
+
+        $this->deconnexion($pdo);
+    }
+
 }
 
 ?>

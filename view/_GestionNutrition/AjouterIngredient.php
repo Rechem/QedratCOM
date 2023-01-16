@@ -35,14 +35,15 @@ if (isset($_POST['submit'])) {
     );
 
     header('location: ./GestionNutrition.php');
-}else if (isset($_POST['update'])){
+} else if (isset($_POST['update'])) {
     $isHealthy = 0;
 
     if (isset($_POST['isHealthy'])) {
         $isHealthy = 1;
     }
 
-    $controller->modifierIngredient($ingredient['idIngredient'],
+    $controller->modifierIngredient(
+        $ingredient['idIngredient'],
         $_POST['nom'], $_POST['calories'],
         empty($_POST['glucides']) ? 0 : $_POST['glucides'],
         empty($_POST['lipides']) ? 0 : $_POST['lipides'],
@@ -127,12 +128,14 @@ if (isset($_POST['submit'])) {
                             echo "checked"; ?>>
                         <label for="isHealthy">Ingrédient healthy</label>
                     </div>
-                    <button type="submit" class="cta-btn trouver-recette" 
-                    <?php if (isset($_GET['edit']))
+                    <button type="submit" class="cta-btn trouver-recette" <?php if (isset($_GET['edit']))
                         echo "name=\"update\"";
                     else
                         echo "name=\"submit\""; ?>>
-                        Ajouter
+                        <?php if (isset($_GET['edit']))
+                            echo "Modifier";
+                        else
+                            echo "Ajouter"; ?>
                     </button>
                 </form>
             </div>

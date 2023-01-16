@@ -69,6 +69,32 @@ class AdminController extends SuperController
         return $ingredientModel->getIngredientById($id);
     }
 
+    public function supprimerDiapo($idDiaporama){
+        $userModel = new UserModel();
+        return $userModel->supprimerDiapo($idDiaporama);
+
+    }
+
+    public function ajouterDiapo($lien, $image){
+        $userModel = new UserModel();
+        return $userModel->ajouterDiapo($lien, $image);
+    }
+    
+    public function supprimerMessage($idMessage){
+        $userModel = new UserModel();
+        return $userModel->supprimerMessage($idMessage);
+    }
+
+    public function getMessages(){
+        $userModel = new UserModel();
+        return $userModel->getMessages();
+    }
+
+    public function getRecetteByUser($idUser){
+        $recetteModel = new RecetteModel();
+        return $recetteModel->getRecetteByUser($idUser);
+    }
+
 }
 
 ?>
