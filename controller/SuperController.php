@@ -137,5 +137,11 @@ abstract class SuperController {
         $userModel = new UserModel();
         return $userModel->ajouterMessage($nomprenom, $mail, $message);
     }
+
+    public function getNewsById($idNews)
+    {
+        $newsModel = new NewsModel();
+        return $newsModel->getNewsById($idNews);
+    }
 }
 ?>

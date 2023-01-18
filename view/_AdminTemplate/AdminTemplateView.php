@@ -43,7 +43,7 @@ class AdminTemplateView extends SuperTemplateView
                 </a>
                 <a href="../_Messages/Messages.php" class="text-decoration-none">
                     <div class="menu-item" role="button">
-                        <ion-icon name="chatbubble-outline"></ion-icon>
+                        <ion-icon name="chatbubble-outline" class="menu-icon"></ion-icon>
                         <h5>Messages</h5>
                     </div>
                 </a>

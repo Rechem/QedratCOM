@@ -7,16 +7,18 @@ $view = new AdminTemplateView();
 $controller = new AdminController();
 session_start();
 
-if(!$controller->isAdmin($_SESSION['id'])){
+if (!$controller->isAdmin($_SESSION['id'])) {
     header('location: ../Home/Home.php');
 }
 
-if(isset($_POST['edit'])){
+if (isset($_POST['edit'])) {
     // inchallah
-}else if (isset($_POST['delete'])){
+} else if (isset($_POST['delete'])) {
     $controller->deleteRecetteById($_POST['id']);
 } else if (isset($_POST['publish'])) {
     $controller->publishRecette($_POST['id']);
+} else if (isset($_POST['hide'])) {
+    $controller->hideRecette($_POST['id']);
 }
 ?>
 
@@ -31,7 +33,7 @@ if(isset($_POST['edit'])){
 <body>
     <section class="d-flex">
         <?php
-        $view->showSidebar($_POST['deconnexion']?? NULL);
+        $view->showSidebar($_POST['deconnexion'] ?? NULL);
         ?>
         <div class="containerZ">
             <div class="content">
@@ -76,24 +78,31 @@ if(isset($_POST['edit'])){
                             <td style="font-size: 1.2rem">
                                 <div class="d-flex justify-content-evenly" style="gap:0.5rem;">
                                     <form action="" method="post" class="d-flex" style="gap:0.5rem;">
-                                    <input type="hidden" name="id" value="<?php echo $row['idRecette']; ?>">
-                                        <button class="plain-submit-btn icon-btn" type="submit"
-                                        name="edit">
+                                        <input type="hidden" name="id" value="<?php echo $row['idRecette']; ?>">
+                                        <button class="plain-submit-btn icon-btn" type="submit" name="edit">
                                             <ion-icon name="pencil"></ion-icon>
                                         </button>
-                                        <button class="plain-submit-btn icon-btn" type="submit"
-                                        name="delete">
+                                        <button class="plain-submit-btn icon-btn" type="submit" name="delete">
                                             <ion-icon name="trash"></ion-icon>
                                         </button>
                                         <?php if ($row['idEtat'] == 2) { ?>
-                                            <button class="plain-submit-btn icon-btn" type="submit"
-                                            name="publish">
+                                            <button class="plain-submit-btn icon-btn" type="submit" name="publish">
                                                 <ion-icon name="checkmark-circle"></ion-icon>
                                             </button>
-                                        <?php } ?>
+                                        <?php } else if ($row['idEtat'] == 1) { ?>
+                                                <button class="plain-submit-btn icon-btn" type="submit" name="hide">
+                                                    <ion-icon name="lock-closed"></ion-icon>
+                                                </button>
+                                        <?php } else {
+                                            ?>
+                                                <button class="plain-submit-btn icon-btn" type="submit" name="publish">
+                                                    <ion-icon name="lock-open"></ion-icon>
+                                                </button>
+                                            <?php
+                                        } ?>
                                     </form>
-                                    <a href="../Recette/Recette.php?id=<?php echo $row['idRecette'] ?>"
-                                        target="_blank" class="text-decoration-none icon-btn">
+                                    <a href="../Recette/Recette.php?id=<?php echo $row['idRecette'] ?>" target="_blank"
+                                        class="text-decoration-none icon-btn">
                                         <ion-icon name="eye"></ion-icon>
                                     </a>
                                 </div>

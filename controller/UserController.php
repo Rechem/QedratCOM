@@ -125,12 +125,7 @@ class UserController extends SuperController
         return $newsModel->getNews();
     }
 
-    public function getNewsById($idNews)
-    {
-        $newsModel = new NewsModel();
-        return $newsModel->getNewsById($idNews);
-    }
-
+    
     public function getFetesByName($search = "", $limit = 4)
     {
         $feteModel = new FeteModel();

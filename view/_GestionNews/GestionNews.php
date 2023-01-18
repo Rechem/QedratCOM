@@ -11,9 +11,7 @@ if (!$controller->isAdmin($_SESSION['id'] ?? -1)) {
     header('location: ../Home/Home.php');
 }
 
-if(isset($_POST['edit'])){
-    // inchallah
-} else if (isset($_POST['delete'])) {
+if (isset($_POST['delete'])) {
     $controller->deleteNews($_POST['id']);
 }
 
@@ -64,9 +62,10 @@ if(isset($_POST['edit'])){
                                 <div class="d-flex justify-content-evenly" style="gap:0.5rem;">
                                     <form action="" method="post" class="d-flex" style="gap:0.5rem;">
                                         <input type="hidden" name="id" value="<?php echo $row['idNews']; ?>">
-                                        <button class="plain-submit-btn icon-btn" type="submit" name="edit">
+                                        <a href="AjouterNews.php?edit=<?php echo $row['idNews']; ?>"
+                                        class="text-decoration-none icon-btn">
                                             <ion-icon name="pencil"></ion-icon>
-                                        </button>
+                                        </a>
                                         <button class="plain-submit-btn icon-btn" type="submit" name="delete">
                                             <ion-icon name="trash"></ion-icon>
                                         </button>

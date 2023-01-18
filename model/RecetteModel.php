@@ -18,7 +18,37 @@ class RecetteModel extends Model
         parent::deconnexion($pdo);
     }
 
+    public function hideRecette($idRecette)
+    {
+        $pdo = parent::connexion();
+
+        $qtf = $pdo->prepare("UPDATE recette
+                SET idEtat = 4
+                WHERE idRecette = :idRecette");
+
+        $qtf->bindParam(':idRecette', $idRecette);
+        $qtf->execute();
+
+        parent::deconnexion($pdo);
+    }
+
     public function deleteRecetteById($idRecette){
+
+        $recette = $this->getRecetteById($idRecette);
+        if (!$recette) {
+            return;
+        }
+
+        $imageLink = $recette["image"];
+        $videoLink = $recette["video"];
+
+        if (!empty($imageLink))
+            unlink(__DIR__ . '/..' . $imageLink);
+
+
+        if (!empty($videoLink))
+            unlink(__DIR__ . '/..' . $videoLink);
+
         $pdo = parent::connexion();
 
         $qtf = $pdo->prepare("DELETE FROM `recette` WHERE `recette`.`idRecette` = :idRecette");

@@ -61,7 +61,11 @@ if (isset($_POST['submit'])) {
     <?php
     $view->showCSS();
     ?>
-    <title>Ajouter un ingrédient</title>
+    <title>
+        <?php if (isset($_GET['edit']))
+            echo "Modifier";
+        else
+            echo "Ajouter"; ?> un ingrédient</title>
 </head>
 
 <body>
@@ -71,7 +75,12 @@ if (isset($_POST['submit'])) {
         ?>
         <div class="containerZ">
             <div class="content">
-                <h4 class="mb-5">Ajouter un ingrédient</h4>
+                <h4 class="mb-5">
+                    <?php if (isset($_GET['edit']))
+                        echo "Modifier";
+                    else
+                        echo "Ajouter"; ?> un ingrédient
+                </h4>
                 <form action="" method="post" id="add-ingredient-form">
                     <?php if (isset($_GET['edit'])) {
                         echo "<input type=\"hidden\" name=\"id\" value=\"" . $ingredient['idIngredient'] . "\"";

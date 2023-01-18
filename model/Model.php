@@ -33,7 +33,7 @@ class Model
     {
 
         if (!is_uploaded_file($image['tmp_name'])) {
-            echo "Image non fournie";
+            // echo "Image non fournie";
             return"";
         }
 
@@ -44,13 +44,13 @@ class Model
         if (
             $imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
         ) {
-            echo "Format incorrect : jpg, jpeg, png seulement";
+            // echo "Format incorrect : jpg, jpeg, png seulement";
             return "";
         }
 
         $checkImage = getimagesize($tempname);
         if (!$checkImage) {
-            echo "Veuillez ajouter une image";
+            // echo "Veuillez ajouter une image";
             return "";
         }
 
@@ -63,7 +63,7 @@ class Model
         $target_file = $target_dir . $newFileName;
 
         if (!move_uploaded_file($tempname, $target_file)) {
-            echo "Erreur lors de l'upload de l'image";
+            // echo "Erreur lors de l'upload de l'image";
             return "";
         }
 

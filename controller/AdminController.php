@@ -10,6 +10,11 @@ class AdminController extends SuperController
         return $recetteModel->publishRecette($idRecette);
     }
 
+    public function hideRecette($idRecette){
+        $recetteModel = new RecetteModel();
+        return $recetteModel->hideRecette($idRecette);
+    }
+
     public function getUsers()
     {
         $userModel = new UserModel();
@@ -52,6 +57,11 @@ class AdminController extends SuperController
     public function ajouterNews($titre, $corps, $image, $video){
         $newsModel = new NewsModel();
         return $newsModel->ajouterNews($titre, $corps, $image, $video);
+    }
+
+    public function modifierNews($idNews, $titre, $corps, $image, $video){
+        $newsModel = new NewsModel();
+        return $newsModel->modifierNews($idNews, $titre, $corps, $image, $video);
     }
 
     public function deleteNews($idNews){
