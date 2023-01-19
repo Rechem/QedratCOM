@@ -49,6 +49,7 @@ if (isset($_POST['submit'])) {
             $etapesArr, $fetesArr, $isHealthy
         );
     }
+    header("location: ../Home/Home.php");
 }
 ?>
 

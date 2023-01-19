@@ -152,7 +152,7 @@ class UserModel extends Model
         if ($isLegit) {
             if($result['idStatusUtilisateur'] != 1 ){
                 parent::deconnexion($pdo);
-                return "Compte non comfirmé";
+                return "Compte non comfirmé ou bannis";
             }
             if (!isset($_SESSION)) {
                 session_start();
@@ -266,7 +266,7 @@ class UserModel extends Model
         FROM (SELECT idRecette FROM favoris WHERE idUser = :idUser) as n
         LEFT OUTER JOIN recette r on r.idRecette = n.idRecette;");
 
-        $qtf->bindParam(':idUser', $_SESSION['id']);
+        $qtf->bindParam(':idUser', $idUser);
         $qtf->execute();
         $result = $qtf->fetchAll();
 
@@ -283,7 +283,7 @@ class UserModel extends Model
         FROM (SELECT idRecette, note FROM notation WHERE idUser = :idUser) as n
         LEFT OUTER JOIN recette r on r.idRecette = n.idRecette;");
 
-        $qtf->bindParam(':idUser', $_SESSION['id']);
+        $qtf->bindParam(':idUser', $idUser);
         $qtf->execute();
         $result = $qtf->fetchAll();
 
