@@ -414,6 +414,7 @@ section>h3 {
     transition: opacity 0.3s ease;
     pointer-events: none;
     overflow-y: scroll;
+    z-index: 100;
 }
 
 #modal-container.show {
@@ -489,7 +490,7 @@ section>h3 {
 /* carousel stuff */
 
 #carousselControls {
-    max-height: calc(100vh - 8.6125rem);
+    max-height: calc(100vh - 8.1875rem);
     overflow: hidden;
 }
 

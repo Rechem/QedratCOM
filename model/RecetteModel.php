@@ -32,7 +32,8 @@ class RecetteModel extends Model
         parent::deconnexion($pdo);
     }
 
-    public function deleteRecetteById($idRecette){
+    public function deleteRecetteById($idRecette)
+    {
 
         $recette = $this->getRecetteById($idRecette);
         if (!$recette) {
@@ -42,12 +43,24 @@ class RecetteModel extends Model
         $imageLink = $recette["image"];
         $videoLink = $recette["video"];
 
-        if (!empty($imageLink))
-            unlink(__DIR__ . '/..' . $imageLink);
+        if (!empty($imageLink)) {
+            try {
+                //code...
+                unlink(__DIR__ . '/..' . $imageLink);
+            } catch (\Throwable $th) {
+                //throw $th;
+            }
+        }
 
 
-        if (!empty($videoLink))
-            unlink(__DIR__ . '/..' . $videoLink);
+        if (!empty($videoLink)) {
+            try {
+                //code...
+                unlink(__DIR__ . '/..' . $videoLink);
+            } catch (\Throwable $th) {
+                //throw $th;
+            }
+        }
 
         $pdo = parent::connexion();
 
@@ -71,9 +84,10 @@ class RecetteModel extends Model
     }
 
     //admin only
-    public function getAllRecettes(){
+    public function getAllRecettes()
+    {
         $pdo = parent::connexion();
-    
+
         $qtf = (
             "SELECT
             recette.idUser,

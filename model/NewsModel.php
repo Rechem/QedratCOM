@@ -72,8 +72,14 @@ class NewsModel extends Model
         $videoLink = $news["video"];
 
         if (isset($image) && !empty($image)) {
-            if (!empty($imageLink))
-                unlink(__DIR__ . '/..' . $imageLink);
+            if (!empty($imageLink)) {
+                try {
+                    //code...
+                    unlink(__DIR__ . '/..' . $imageLink);
+                } catch (\Throwable $th) {
+                    //throw $th;
+                }
+            }
             $tmpLink = parent::ajouterImage($image);
             if (!empty($tmpLink))
                 $imageLink = $tmpLink;
@@ -82,7 +88,12 @@ class NewsModel extends Model
 
         if (isset($video) && !empty($video)) {
             if (!empty($videoLink))
-                unlink(__DIR__ . '/..' . $videoLink);
+                try {
+                    //code...
+                    unlink(__DIR__ . '/..' . $videoLink);
+                } catch (\Throwable $th) {
+                    //throw $th;
+                }
             $tmpLink = parent::ajouterVideo($video);
             if (!empty($tmpLink))
                 $videoLink = $tmpLink;
@@ -118,12 +129,24 @@ class NewsModel extends Model
         $imageLink = $news["image"];
         $videoLink = $news["video"];
 
-        if (!empty($imageLink))
-            unlink(__DIR__ . '/..' . $imageLink);
+        if (!empty($imageLink)) {
+            try {
+                //code...
+                unlink(__DIR__ . '/..' . $imageLink);
+            } catch (\Throwable $th) {
+                //throw $th;
+            }
+        }
 
 
-        if (!empty($videoLink))
-            unlink(__DIR__ . '/..' . $videoLink);
+        if (!empty($videoLink)) {
+            try {
+                //code...
+                unlink(__DIR__ . '/..' . $videoLink);
+            } catch (\Throwable $th) {
+                //throw $th;
+            }
+        }
 
         $pdo = parent::connexion();
 
