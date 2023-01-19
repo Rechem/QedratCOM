@@ -114,6 +114,27 @@ class Model
         return $result;
     }
 
+    public function getPercentage(){
+        $pdo = $this->connexion();
+
+        $qtf = $pdo->prepare("SELECT value from pourcentage where id=\"pourcentage\";");
+        $qtf->execute();
+        $result = $qtf->fetch();
+
+        $this->deconnexion($pdo);
+        return $result['value'];
+    }
+
+    public function setPercentage($perc = 0.7){
+        $pdo = $this->connexion();
+
+        $qtf = $pdo->prepare("UPDATE pourcentage SET value=:perc where id=\"pourcentage\";");
+        $qtf->bindParam(':perc', $perc);
+        $qtf->execute();
+
+        $this->deconnexion($pdo);
+    }
+
     public function getDiapos(){
         $pdo = $this->connexion();
 

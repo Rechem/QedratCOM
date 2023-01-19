@@ -256,8 +256,10 @@ class RecetteModel extends Model
         return $result;
     }
 
-    public function getRecettesIdsHavingIngredients($ingredients, $percentage = 0.7)
+    public function getRecettesIdsHavingIngredients($ingredients)
     {
+        $percentage = parent::getPercentage();
+
         $selectedIngredientsArray = explode(',', $ingredients);
         $ingredientModel = new IngredientModel();
         $recettes = $ingredientModel->getIngredientsGroupByRecette();

@@ -105,6 +105,18 @@ class AdminController extends SuperController
         return $recetteModel->getRecetteByUser($idUser);
     }
 
+    public function getPercentage(){
+        $model = new Model();
+        return $model->getPercentage();
+
+    }
+
+    public function setPercentage($perc){
+        $model = new Model();
+        return $model->setPercentage($perc);
+
+    }
+
 }
 
 ?>

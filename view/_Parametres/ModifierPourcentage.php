@@ -13,7 +13,7 @@ if (!$controller->isAdmin($_SESSION['id'] ?? -1)) {
 
 if (isset($_POST['submit'])) {
 
-    $controller->ajouterDiapo($_POST['lien'], $_FILES['image']);
+    $controller->setPercentage($_POST['perc']);
 
     header('location: ./Parametres.php');
 }
@@ -24,7 +24,7 @@ if (isset($_POST['submit'])) {
     <?php
     $view->showCSS();
     ?>
-    <title>Ajouter une diaporama</title>
+    <title>Modifier pourcentage</title>
 </head>
 
 <body>
@@ -34,17 +34,13 @@ if (isset($_POST['submit'])) {
         ?>
         <div class="containerZ">
             <div class="content">
-                <h4 class="mb-5">Ajouter une diaporama</h4>
+                <h4 class="mb-5">Modifier pourcentage</h4>
                 <form action="" method="post" id="add-ingredient-form" enctype="multipart/form-data">
-                    <h5 class="mb-1">Lien (ex : /Recette/Recette?id=2)</h5>
-                    <input type="text" name="lien" class="mb-3" required>
-                    <hr>
-                    <div class="d-flex align-items-center justify-content-between my-3">
-                        <h5>Image</h5>
-                        <input type="file" name="image" accept="image/jpg, image/jpeg, image/png" required>
-                    </div>
+                    <h5 class="mb-1">Pourcentage</h5>
+                    <input type="number" step="0.01" max="1" min="0.01" name="perc" required
+                    value="<?php echo $controller->getPercentage(); ?>">                    
                     <button type="submit" class="cta-btn trouver-recette" name="submit">
-                        Ajouter
+                        Modifier
                     </button>
                 </form>
             </div>

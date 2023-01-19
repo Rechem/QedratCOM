@@ -75,6 +75,15 @@ if (isset($_POST['delete'])) {
                         } ?>
                     </tbody>
                 </table>
+                <hr>
+                <div class="d-flex justify-content-between align-items-center my-4">
+                    <?php
+                    $percentage = $controller->getPercentage();
+                    ?>
+                    <h4>Pourcentage idee recette : <?php echo $percentage; ?> </h4>
+                    <h5>
+                        <a href="ModifierPourcentage.php" class="text-button">Modifier</a>
+                    </h5>
             </div>
         </div>
     </section>
