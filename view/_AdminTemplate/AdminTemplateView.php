@@ -13,9 +13,11 @@ class AdminTemplateView extends SuperTemplateView
         <div class="sidebar">
             <div>
                 <div class="d-flex align-items-center justify-content-center my-5">
-                    <div id="logo" style="height: 4rem;">
-                        <img src="../../public/images/logo.png" alt="logo">
-                    </div>
+                    <a href="../..">
+                        <div id="logo" style="height: 4rem;">
+                            <img src="../../public/images/logo.png" alt="logo">
+                        </div>
+                    </a>
                 </div>
                 <a href="../_GestionRecette/GestionRecette.php" class="text-decoration-none">
                     <div class="menu-item">

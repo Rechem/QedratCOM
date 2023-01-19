@@ -46,9 +46,6 @@ class UserTemplateView extends SuperTemplateView
                     ?>
                     </h6>
                 </div>
-                <?php
-                $this->showSocialLinks();
-                ?>
                 <header>
                     <div id="modal-container">
                         <div id="modal">
@@ -105,11 +102,12 @@ class UserTemplateView extends SuperTemplateView
                         </div>
                     </div>
                     <div class="boundary">
-                        <div id="logo-login">
+                        <div id="logo-login" class="position-relative">
                             <div id="logo">
                                 <img src="../../public/images/logo.png" alt="logo">
                             </div>
                             <?php
+                            $this->showSocialLinks();
                             if (!isset($session) || !isset($session['id'])) {
                                 ?>
                                 <button id="login-btn">
